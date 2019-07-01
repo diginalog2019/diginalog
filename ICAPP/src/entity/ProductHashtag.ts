@@ -1,11 +1,12 @@
-import {Entity, Column} from "typeorm";
+import {Entity, Column,PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class ProductHashtag {
-    @Column()
-    PID: number;
+    //@Column()
+    //PID: number;
 
     @Column()
     HID: number;
-
+    @PrimaryGeneratedColumn()
+    PID: number;
 }

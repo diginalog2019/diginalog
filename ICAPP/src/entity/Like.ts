@@ -1,11 +1,13 @@
-import {Entity, Column} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class Like {
-    @Column()
-    PID: number;
+    //@Column()
+    //PID: number;
 
     @Column()
     UID: number;
 
+    @PrimaryGeneratedColumn()
+    PID: number;
 }

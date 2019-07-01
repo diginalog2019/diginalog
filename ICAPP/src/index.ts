@@ -1,17 +1,28 @@
 import express from 'express';
-import router from "./router";
+import router from './router';
 import bodyParser from 'body-parser';
+import {createConnection} from "typeorm";
+import {Category} from "./entity/Category";
 
 const app = express();
 
-app.get('/api/hello', (req, res) => {
-    res.send('hello world');
-});
-app.use(bodyParser());
-app.use('/api', router);
+createConnection().then(async connection => {
 
-app.listen(8000, () => {
-    console.log('server is listening 8000');
-});
+    let test = new Category();
 
-//hello world
+    test.Cate_Name = "yy";
+
+
+    await connection.manager.save(test);
+    console.log("TEST has been saved");
+
+    // start express server --------------------------------
+    app.use(bodyParser());
+
+    app.use('/api', router);
+
+    app.listen(8000, () => {
+        console.log('server is listening 8000');
+    });
+
+}).catch(error => console.log(error));
