@@ -1,5 +1,5 @@
-import {Entity,Column,PrimaryGeneratedColumn} from "typeorm";
-
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable} from "typeorm";
+import {Product} from "./Product"
 @Entity()
 export class User{
     @PrimaryGeneratedColumn()
@@ -36,4 +36,19 @@ export class User{
     @Column()
     U_Birth : string;
 
+    @ManyToMany(type => Product , products => products.PID , {
+        cascade : true
+    })
+    @JoinTable({
+        name: 'Basket'
+    })
+    products : Product[];
+
+    @ManyToMany(type => Product , likeProducts => likeProducts.PID , {
+        cascade : true
+    })
+    @JoinTable({
+        name: 'Like'
+    })
+    likeProducts : Product[];
 }

@@ -1,5 +1,8 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
-
+import {Entity, Column, PrimaryGeneratedColumn,ManyToMany,JoinTable,ManyToOne} from "typeorm";
+import {Hashtag} from "./Hashtag"
+import {User} from "./User"
+import {Creator} from "./Creator"
+import {Category} from "./Category";
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn()
@@ -46,4 +49,23 @@ export class Product {
 
     @Column()
     CID: number;
+
+    @ManyToMany(type => Hashtag , hashtags => hashtags.HID , {
+        cascade : true
+    })
+    @JoinTable({
+        name: 'ProductHashtag'
+    })
+    hashtags : Hashtag[];
+
+    @ManyToMany(type => User , users => users.UID , {
+        cascade : true
+    })
+    users : User[];
+
+    @ManyToOne(type => Creator, creator => creator.products , {onDelete: 'CASCADE', onUpdate: "CASCADE"})
+    creator: Creator;
+
+    @ManyToOne(type => Category, category => category.products , {onDelete: 'CASCADE', onUpdate: "CASCADE"})
+    category: Category;
 }

@@ -8,13 +8,13 @@ const app = express();
 
 createConnection().then(async connection => {
 
-    let test = new Category();
+    //let test = new Category();
 
-    test.Cate_Name = "yy";
+    //test.Cate_Name = "yy";
 
 
-    await connection.manager.save(test);
-    console.log("TEST has been saved");
+    //await connection.manager.save(test);
+    //console.log("TEST has been saved");
 
     // start express server --------------------------------
     app.use(bodyParser());

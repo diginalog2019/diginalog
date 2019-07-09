@@ -1,5 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
-
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany,JoinTable} from "typeorm";
+import {Product} from "./Product"
 @Entity()
 export class Hashtag {
     @PrimaryGeneratedColumn()
@@ -9,4 +9,9 @@ export class Hashtag {
         length: 10
     })
     H_Name: string;
+
+    @ManyToMany(type => Product , products => products.PID ,  {
+        cascade : true
+    })
+    products : Product[];
 }

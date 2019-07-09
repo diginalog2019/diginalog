@@ -1,5 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
-
+import {Entity, Column, PrimaryGeneratedColumn,OneToMany} from "typeorm";
+import {Product} from "./Product"
 @Entity()
 export class Creator {
 
@@ -20,4 +20,7 @@ export class Creator {
         length: 50
     })
     C_Page: string;
+
+    @OneToMany(type => Product, products => products.creator)
+    products: Product[];
 }
