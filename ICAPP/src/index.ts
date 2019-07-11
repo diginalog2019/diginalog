@@ -5,6 +5,7 @@ import {createConnection} from "typeorm";
 import {User} from "./entity/User";
 import {Product} from "./entity/Product";
 import {Hashtag} from "./entity/Hashtag";
+import {Category} from "./entity/Category";
 import {Hash} from "crypto";
 
 const app = express();
@@ -60,6 +61,23 @@ createConnection().then(async connection => {
     hash1.H_Name = "test hash name 1";
     hash1.HID = 1;
     hash1.products = [product1,product2];
+    //await connection.manager.save(hash1);
+
+    /*let cate1 = new Category();
+    cate1.Cate_ID = 1;
+    cate1.Cate_Name = "Shopping";
+    cate1.depth = 0;
+    cate1.upper_cate_ID = -1;
+    cate1.products = [product1];
+    await connection.manager.save(cate1);
+
+    let cate2 = new Category();
+    cate1.Cate_ID = 2;
+    cate1.Cate_Name = "hehehe";
+    cate1.depth = 1;
+    cate1.upper_cate_ID = 0;
+    cate1.products = [product1,product2];
+    await connection.manager.save(cate2);*/
 
     const result = await connection.getRepository(Product).find({relations:["hashtags"]});
     console.log("Loaded findHero: ",result);

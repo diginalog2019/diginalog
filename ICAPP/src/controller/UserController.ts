@@ -1,15 +1,25 @@
 import {getConnection} from "typeorm";
 import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
+import {Category} from "../entity/Category";
 
 export class UserController {
     static getHeroes = async (req, res) => {
-        const {start_index, page_size} = req.query;
+
+        console.log(req.params);
+        const {Cate_ID} = req.params;
+
+        const options = {relations: ["products"], where: [{Cate_ID}], take: 1};
+
+        const result = await getConnection().getRepository(Category).findOne(options);
+        res.send(result);
+
+        /*const {start_index, page_size} = req.query;
         console.log("1");
         const options = {};
-        options['select'] = ["UID"];
+        options['select'] = ["UID","U_Name"];
         console.log("2");
-        //options['order'] = {id: 'DESC'};
+        options['order'] = {UID: 'ASC'};
         if (start_index) {
             options['skip'] = start_index;
             console.log("3");
@@ -29,6 +39,6 @@ export class UserController {
         console.log("7");
         result.data = heroes;
         result.total = total;
-        res.send(result);
+        res.send(result);*/
     }
 }
