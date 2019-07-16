@@ -83,7 +83,10 @@ createConnection().then(async connection => {
     console.log("Loaded findHero: ",result);
 
     // start express server --------------------------------
-    app.use(bodyParser());
+    //app.use(bodyParser());
+    const bodyParser = require('body-parser');
+    app.use(bodyParser.json({limit: "50mb"}));
+    app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
     app.get('/api/hello', (req, res) => {
         res.send('hello world');

@@ -18,6 +18,8 @@ export class Category {
     @Column()
     upper_cate_ID: number;
 
-    @OneToMany(type => Product, products => products.category)
+    @OneToMany(type => Product, products => products.category, {
+        cascade : true
+    })
     products: Product[];
 }
