@@ -183,5 +183,32 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
+    static removeCategory = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
 
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Category)
+            .where("Cate_ID = :id", { id })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    static removeCreator = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Creator)
+            .where("CID = :id", { id })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
 }

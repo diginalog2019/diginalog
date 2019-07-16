@@ -11,5 +11,7 @@ routes.post('/hero', AdminController.addHero);
 routes.put('/modifyCategory', AdminController.modifyCategory);
 routes.put('/modifyCreator',AdminController.modifyCreator);
 routes.post('/photo',upload.single('photo'),AdminController.addPhoto);
+routes.delete('/removeCategory', AdminController.removeCategory);
+routes.delete('/removeCreator', AdminController.removeCreator);
 
 export default routes;
