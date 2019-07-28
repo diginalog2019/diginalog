@@ -70,7 +70,7 @@ export class AdminController {
         // s3 upload configuring parameters
 
         const params = {
-            Bucket: 'icapp-s3',
+            Bucket: 'diginalog-s3',
             Body : req.file.buffer,
             Key : "photo/" + Date.now() + "_" + req.file.originalname,
             ContentType: req.file.mimetype,
