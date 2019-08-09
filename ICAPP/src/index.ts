@@ -12,7 +12,7 @@ const app = express();
 
 createConnection().then(async connection => {
 
-    //let test = new Category();
+    /*//let test = new Category();
 
     //test.Cate_Name = "yy";
 
@@ -63,7 +63,7 @@ createConnection().then(async connection => {
     hash1.products = [product1,product2];
     //await connection.manager.save(hash1);
 
-    /*let cate1 = new Category();
+    /!*let cate1 = new Category();
     cate1.Cate_ID = 1;
     cate1.Cate_Name = "Shopping";
     cate1.depth = 0;
@@ -77,10 +77,10 @@ createConnection().then(async connection => {
     cate1.depth = 1;
     cate1.upper_cate_ID = 0;
     cate1.products = [product1,product2];
-    await connection.manager.save(cate2);*/
+    await connection.manager.save(cate2);*!/
 
     const result = await connection.getRepository(Product).find({relations:["hashtags"]});
-    console.log("Loaded findHero: ",result);
+    console.log("Loaded findHero: ",result);*/
 
     // start express server --------------------------------
     //app.use(bodyParser());
