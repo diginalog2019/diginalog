@@ -193,7 +193,6 @@ export class AdminController {
             .from(Category)
             .where("Cate_ID = :id", { id })
             .execute();
-
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
