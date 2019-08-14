@@ -4,7 +4,7 @@ import {Product} from "../entity/Product";
 import {ResultVo} from "../vo/ResultVo";
 
 export class AdminController {
-    static addHero = async (req, res) => {
+    static addProduct = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 
         const newCategory = new Category();
@@ -39,7 +39,72 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-    static addHero = async (req, res) => {
+    // Shi Ha Yeon : 2019.08.14 Wed----------------------------------------------------------------------
+    static getAllProducts = async (req, res) => {
+        const {start_index, page_size} = req.query;
+
+        const options = {};
+       /* options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
+            "P_Size","P_StarPoint","P_DetailIMG",
+            "P_TitleIMG","Cate_ID","CID"];*/
+        options['select'] = ["PID", "P_Name", "P_Price", "P_Extension", "P_StarPoint",
+            "P_TitleIMG"];
+        options['order'] = {PID: 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        const products = await getConnection().getRepository(Product).find(options);
+
+        const total = await getConnection().getRepository(Product).count();
+
+        const result = new ResultVo(0, "success");
+        result.data = products;
+        result.total = total;
+        res.send(result);
+    }
+    // Shi Ha Yeon : Fin ---------------------------------------------------------------------
+    static addProduct = async (req, res) => {
+        const {PID, P_Name, P_Date, P_Price, P_Extension,
+            P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG,Cate_ID} = req.body;
+
+        const newProduct = new Product();
+        newProduct.PID = PID;
+        newProduct.P_Name = P_Name;
+        newProduct.P_Date = P_Date;
+        newProduct.P_Price = P_Price;
+        newProduct.P_Extension = P_Extension;
+        newProduct.P_Size = P_Size;
+        newProduct.P_StarPoint = P_StarPoint;
+        newProduct.P_DetailIMG = P_DetailIMG;
+        newProduct.P_TitleIMG = P_TitleIMG ;
+        newProduct.category = Cate_ID;
+
+        //await getConnection().getRepository(Product).save(newProduct);
+
+        if (Cate_ID && Cate_ID.length > 0) {
+            const newCategory = Cate_ID.map(category => {
+                const c = new Category();
+                c.Cate_ID = category.Cate_ID;
+                c.Cate_Name = category.Cate_Name;
+                c.depth = category.depth;
+                c.upper_cate_ID = category.upper_cate_ID;
+                //c.products = [newProduct]; // relation key
+                newProduct.category = c;
+
+                return c;
+            })
+            // bulk insert
+            await getConnection().getRepository(Product).save(newProduct);
+            await getConnection().createQueryBuilder().insert().into(Category).values(newCategory).execute();
+        }
+
+        res.send(new ResultVo(0, 'success'));
+    }
+    static addCategory = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 
         const newCategory = new Category();

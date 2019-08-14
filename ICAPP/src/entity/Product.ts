@@ -40,11 +40,11 @@ export class Product {
     @Column("text")
     P_TitleIMG: string;
 
-    @Column({nullable:true})
+/*    @Column({nullable:true})
     Cate_ID: number;
 
     @Column({nullable:true})
-    CID: number;
+    CID: number;*/
 
     @ManyToMany(type => Hashtag , hashtags => hashtags.HID , {
         cascade : true

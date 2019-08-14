@@ -4,7 +4,7 @@ import {ResultVo} from "../vo/ResultVo";
 import {Category} from "../entity/Category";
 
 export class UserController {
-    static getHero = async (req, res) => {
+    static getProduct = async (req, res) => {
 
         console.log(req.params);
         const {Cate_ID} = req.params;
