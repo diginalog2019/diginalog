@@ -4,7 +4,7 @@ import {Product} from "../entity/Product";
 import {ResultVo} from "../vo/ResultVo";
 
 export class AdminController {
-    static addHero = async (req, res) => {
+    static addProduct = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 
         const newCategory = new Category();
@@ -39,7 +39,14 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-    static addHero = async (req, res) => {
+
+    static getProducts = async(req,res) => {
+        const options = {};
+        options['select'] = ["PID"];
+        const result = await getConnection().getRepository(Category).find(options);
+        res.send(result);
+    }
+    static addProduct = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 
         const newCategory = new Category();
