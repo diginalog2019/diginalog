@@ -39,7 +39,6 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-
     // Shi Ha Yeon : 2019.08.14 Wed----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
         const {start_index, page_size} = req.query;
@@ -70,8 +69,7 @@ export class AdminController {
     // Shi Ha Yeon : Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
         const {PID, P_Name, P_Date, P_Price, P_Extension,
-            P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG,Cate_ID} = req.body;
-
+            P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
 
         const newProduct = new Product();
         newProduct.PID = PID;
@@ -84,20 +82,15 @@ export class AdminController {
         newProduct.P_DetailIMG = P_DetailIMG;
         newProduct.P_TitleIMG = P_TitleIMG ;
 
-        //await getConnection().getRepository(Product).save(newProduct);
-
         if (Cate_ID>0) {
             const options = {where:[{Cate_ID}],take:1};
             const c = await getConnection().getRepository(Category).findOne(options);
             newProduct.category = c;
-             //bulk insert
             await getConnection().getRepository(Product).save(newProduct);
         }
 
         res.send(new ResultVo(0, 'success'));
     }
-
-
     static addCategory = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 
