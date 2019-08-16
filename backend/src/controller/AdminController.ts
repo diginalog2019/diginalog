@@ -72,6 +72,7 @@ export class AdminController {
         const {PID, P_Name, P_Date, P_Price, P_Extension,
             P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG,Cate_ID} = req.body;
 
+
         const newProduct = new Product();
         newProduct.PID = PID;
         newProduct.P_Name = P_Name;
@@ -82,29 +83,21 @@ export class AdminController {
         newProduct.P_StarPoint = P_StarPoint;
         newProduct.P_DetailIMG = P_DetailIMG;
         newProduct.P_TitleIMG = P_TitleIMG ;
-        newProduct.category = Cate_ID;
 
         //await getConnection().getRepository(Product).save(newProduct);
 
-        if (Cate_ID && Cate_ID.length > 0) {
-            const newCategory = Cate_ID.map(category => {
-                const c = new Category();
-                c.Cate_ID = category.Cate_ID;
-                c.Cate_Name = category.Cate_Name;
-                c.depth = category.depth;
-                c.upper_cate_ID = category.upper_cate_ID;
-                //c.products = [newProduct]; // relation key
-                newProduct.category = c;
-
-                return c;
-            })
-            // bulk insert
+        if (Cate_ID>0) {
+            const options = {where:[{Cate_ID}],take:1};
+            const c = await getConnection().getRepository(Category).findOne(options);
+            newProduct.category = c;
+             //bulk insert
             await getConnection().getRepository(Product).save(newProduct);
-            await getConnection().createQueryBuilder().insert().into(Category).values(newCategory).execute();
         }
 
         res.send(new ResultVo(0, 'success'));
     }
+
+
     static addCategory = async (req, res) => {
         const {cate_id, cate_name, depth, upper_cate_ID, products} = req.body;
 

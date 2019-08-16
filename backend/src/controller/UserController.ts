@@ -9,7 +9,7 @@ export class UserController {
         console.log(req.params);
         const {Cate_ID} = req.params;
 
-        const options = {relations: ["products"], where: [{Cate_ID}], take: 1};
+        const options = {relation:["products"], where: [{Cate_ID}], take: 1};
 
         const result = await getConnection().getRepository(Category).findOne(options);
         res.send(result);
