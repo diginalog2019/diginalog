@@ -39,16 +39,16 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-    // Shi Ha Yeon : 2019.08.14 Wed----------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.08.30 ----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
         const {start_index, page_size} = req.query;
 
         const options = {};
-       /* options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
+        // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
+        /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
             "P_Size","P_StarPoint","P_DetailIMG",
-            "P_TitleIMG","Cate_ID","CID"];*/
-        options['select'] = ["PID", "P_Name", "P_Price", "P_Extension", "P_StarPoint",
-            "P_TitleIMG"];
+            "P_TitleIMG","categoryCateID", "creatorCID"];*/
+
         options['order'] = {PID: 'DESC'};
         if (start_index) {
             options['skip'] = start_index;
@@ -57,16 +57,23 @@ export class AdminController {
             options['take'] = page_size;
         }
 
-        const products = await getConnection().getRepository(Product).find(options);
+        let products = await getConnection().getRepository(Product).find();
 
         const total = await getConnection().getRepository(Product).count();
 
+        const categorys = await getConnection().getRepository(Category).find();
+
+        const products2 = products.map(product => {
+            let product2 = {CateName:categorys[(product.categoryCateID-1)].Cate_Name, ...product};
+            return product2;
+        });
+        //console.log(products2);
         const result = new ResultVo(0, "success");
-        result.data = products;
+        result.data = products2;
         result.total = total;
         res.send(result);
     }
-    // Shi Ha Yeon : Fin ---------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.08.30 18:16 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
         const {PID, P_Name, P_Date, P_Price, P_Extension,
             P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
