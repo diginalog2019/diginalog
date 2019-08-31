@@ -38,15 +38,27 @@ class Menu extends Component {
               <NavItem>
                 <NavLink to="/heroes" className="nav-link">Product</NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink to="/scoreboard" className="nav-link">Creator</NavLink>
-              </NavItem>
+
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Creator
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink to="/Creator/Creators">Search Creator</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink to="/Creator/register" className="nav-link">Register</NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+
               <NavItem>
                 <NavLink to="/todo" className="nav-link">Admin</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Options
+                  Option
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
