@@ -11,6 +11,9 @@ export class Root extends Component {
           <div className="container" style={{backgroundColor: '#ffffff'}}>
             <Switch>
               <Route exact path="/" component={Home}></Route>
+              /* Kwon Na Hyun : 2019.08.31 -------------------------------------------*/
+              <Route path="/Creator/Register" component="{Register}"></Route>
+              /* Kwon Na Hyun : 2019.08.31 Fin -------------------------------------------*/
             </Switch>
           </div>
 
