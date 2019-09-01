@@ -39,7 +39,7 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-    // Shi Ha Yeon : 2019.08.30 ----------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.09.01 ----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
         const {start_index, page_size} = req.query;
 
@@ -57,23 +57,27 @@ export class AdminController {
             options['take'] = page_size;
         }
 
-        let products = await getConnection().getRepository(Product).find();
+        let products = await getConnection().getRepository(Product).find(options);
 
         const total = await getConnection().getRepository(Product).count();
 
         const categorys = await getConnection().getRepository(Category).find();
 
+        const creators = await getConnection().getRepository(Creator).find();
+
         const products2 = products.map(product => {
-            let product2 = {CateName:categorys[(product.categoryCateID-1)].Cate_Name, ...product};
+            let product2 = {CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+                            CateName:categorys[(product.categoryCateID-1)].Cate_Name,
+                            ...product};
             return product2;
         });
-        //console.log(products2);
+
         const result = new ResultVo(0, "success");
         result.data = products2;
         result.total = total;
         res.send(result);
     }
-    // Shi Ha Yeon : 2019.08.30 18:16 Fin ---------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.09.01 11:31 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
         const {PID, P_Name, P_Date, P_Price, P_Extension,
             P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
@@ -269,4 +273,57 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
+
+    // Shi Ha Yeon : 2019.09.01 11:18 ----------------------------------------------------------------------
+    static getWaitingProducts = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+        options['order'] = {P_Date: 'ASC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        const state = -1;
+        let products = await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("State = :state", {state})
+            .execute();
+
+        const total = Object.keys(products).length;
+        const categorys = await getConnection().getRepository(Category).find();
+
+        const creators = await getConnection().getRepository(Creator).find();
+
+        const products2 = products.map(product => {
+            let product2 = {CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
+                ...product};
+            return product2;
+        });
+
+        const result = new ResultVo(0, "success");
+        result.data = products2;
+        result.total = total;
+        res.send(result);
+    }
+    static setState = async (req, res) => {
+        const {pid, state} = req.body;
+        const updateOption = {};
+        if (state) updateOption['State'] = state;
+
+        await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("PID = :pid", {pid})
+            .execute();
+
+        await getConnection().createQueryBuilder().update(Product)
+            .set(updateOption)
+            .where("PID = :pid", { pid })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    // Shi Ha Yeon : 2019.09.01 12:40 Fin ----------------------------------------------------------------------
 }

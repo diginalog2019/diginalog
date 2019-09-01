@@ -15,7 +15,8 @@ routes.post('/photo',upload.single('photo'),AdminController.addPhoto);
 routes.delete('/removeCategory', AdminController.removeCategory);
 routes.delete('/removeCreator', AdminController.removeCreator);
 routes.get('/products', AdminController.getAllProducts);
-// Shi Ha Yeon : 2019.08.30-----------------------------------------------
-
+// Shi Ha Yeon : 2019.09.01 11:18 -----------------------------------------------
+routes.get('/waitingProducts', AdminController.getWaitingProducts);
+routes.put('/setState', AdminController.setState);
 // Shi Ha Yeon : Fin -----------------------------------------------------
 export default routes;
