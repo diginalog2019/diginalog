@@ -35,4 +35,7 @@ export class CreatorController{
         result.total = total;
         res.send(result);
     }
+    static searchCreatorCID = async (req, res) => {
+        //C_ID 를 CID로 바꿔서 product에서 찾기 
+    }
 }
