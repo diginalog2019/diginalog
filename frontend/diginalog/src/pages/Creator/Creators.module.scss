@@ -3,3 +3,58 @@ ul.img-box {
   padding: 0;
   list-style: none;
 }
+
+.input[type=text] {
+  flex-grow: 1;
+  border-width: 0 0 1px 0;
+  margin: 15px 10px 15px 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #5B45B9;
+  border-style: none;
+  text-shadow: none;
+  text-transform: uppercase;
+  color: #C7BCF8;
+  letter-spacing: 2px;
+  outline: none;
+}
+
+.input[type=text]::-webkit-input-placeholder{
+  color: #C7BCF8;
+  letter-spacing: 2px;
+}
+
+.input[type=text]:focus{
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.input[type=submit] {
+  display: block;
+  font-size: .6em;
+  margin: 15px 15px 15px 0;
+  padding: 10px;
+  background-color: #44338D;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-shadow: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.button,
+.input[type=submit] {
+  outline: none;
+  transition: background-color 0.2s ease,
+  color 0.2s ease;
+}
+
+
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+  background: #2db7f5;
+}
