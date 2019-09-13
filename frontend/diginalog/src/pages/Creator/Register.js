@@ -1,5 +1,6 @@
-/* Kwon Na Hyun : 2019.09.12 -------------------------------------------*/
+/* Kwon Na Hyun : 2019.09.12 && 2019.09.13 -------------------------------------------*/
 import React,{Component} from 'React';
+import api from '../utils/api';
 
 export class Register extends Component {
 

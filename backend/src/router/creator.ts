@@ -9,8 +9,8 @@ const routes = Router();
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 
-routes.post('/addCreator' , CreatorController.addCreator);
-routes.post('/photo', upload.single('photo'), CreatorController.addPhoto);
+routes.post('/registerProduct' , CreatorController.registerProduct);
+routes.post('/addPhoto', upload.single('photo'), CreatorController.addPhoto);
 /*
 routes.post('/addProduct', AdminController.addProduct);
 routes.post('/addCategory', AdminController.addCategory);

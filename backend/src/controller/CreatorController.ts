@@ -7,7 +7,7 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class CreatorController {
-    /* Kwon Na Hyun : 2019.09.01 ------------------------------------------*/
+    /* Kwon Na Hyun : 2019.09.01 && 2019.09.13 ------------------------------------------*/
     static addPhoto = async (req, res) => {
         console.log(req.file);
         // s3 upload configuring parameters
@@ -16,7 +16,7 @@ export class CreatorController {
             Body : req.file.buffer,
             Key : "photo/" + Date.now() + "_" + req.file.originalname,
             ContentType: req.file.mimetype,
-            ACL: 'public-read'
+            ACL: 'public-read-write'
         };
 
         let response, result;
@@ -33,15 +33,18 @@ export class CreatorController {
         result.data = response.Location;
 
         res.send(result);
+        res.send('success');
     }
     /* Kwon Na Hyun : 2019.09.01 fin------------------------------------------*/
-    static addCreator = async (req, res) => {
-        const {nickname, email, page, products} = req.body;
+    static registerProduct = async (req, res) => {
+        const {CID, C_ID, C_Nicknam, C_Email, C_Page, products} = req.body;
 
         const newCreator = new Creator();
-        newCreator.C_Nickname = nickname;
-        newCreator.C_Email = email;
-        newCreator.C_Page = page;
+        newCreator.CID = CID;
+        newCreator.C_ID = C_ID;
+        newCreator.C_Nickname = C_Nicknam;
+        newCreator.C_Email = C_Email;
+        newCreator.C_Page = C_Page;
 
         await getConnection().getRepository(Creator).save(newCreator);
 
@@ -67,3 +70,5 @@ export class CreatorController {
         res.send(new ResultVo(0, 'success'));
     }
 }
+
+/* Kwon Na Hyun : 2019.09.13 fin------------------------------------------*/
