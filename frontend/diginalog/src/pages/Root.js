@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Home from "./Home";
 import Menu from "./Menu";
+import {AdminIndex} from "./Admin/AdminIndex";
+import AdminProducts from "./Admin/AdminProducts";
 export class Root extends Component {
   render() {
     return (
@@ -11,6 +13,8 @@ export class Root extends Component {
           <div className="container" style={{backgroundColor: '#ffffff'}}>
             <Switch>
               <Route exact path="/" component={Home}></Route>
+              <Route path="/admin" component={AdminIndex}></Route>
+              <Route path="/admin/products" component={AdminProducts}></Route>
             </Switch>
           </div>
 
