@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 class AdminProducts extends Component {
   state = {
     pageSize: 10,
-    totalCount: 115,
+    totalCount: 100,
     currentPage: 1,
     products: []
   }
@@ -65,10 +65,11 @@ class AdminProducts extends Component {
               <th scope="col">확장자</th>
               <th scope="col">해상도</th>
               <th scope="col">별점</th>
-              <th scope="col">디테일이미지</th>
-              <th scope="col">타이틀이미지</th>
+              <th scope="col">디테일</th>
+              <th scope="col">타이틀</th>
               <th scope="col">카테고리</th>
               <th scope="col">작가</th>
+              <th scope="col">상태</th>
             </tr>
             </thead>
             <tbody>
@@ -76,7 +77,7 @@ class AdminProducts extends Component {
                     <tr key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
                       <th scope="row">{product.PID}</th>
                       <td>{product.P_Name}</td>
-                      <td>{product.P_Date}</td>
+                      <td>{product.Date}</td>
                       <td>{product.P_Price}</td>
                       <td>{product.P_Extension}</td>
                       <td>{product.P_Size}</td>
@@ -85,6 +86,7 @@ class AdminProducts extends Component {
                       <td>{product.P_TitleIMG}</td>
                       <td>{product.CateName}</td>
                       <td>{product.CreatorName}</td>
+                      <td>{product.StateName}</td>
                     </tr>
               ))}
             </tbody>

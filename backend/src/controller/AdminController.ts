@@ -66,10 +66,24 @@ export class AdminController {
         const creators = await getConnection().getRepository(Creator).find();
 
         const products2 = products.map(product => {
-            let product2 = {CreatorName:creators[(product.creatorCID-1)].C_Nickname,
-                            CateName:categorys[(product.categoryCateID-1)].Cate_Name,
-                            ...product};
+            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+            let state = '';
+            switch(product.State){
+                case -1 : state = "미승인";
+                    break;
+                case 0 : state = "심사중";
+                    break;
+                case 1: state="승인";
+                    break;
+            }
+            let date = product.P_Date.toLocaleString();
+            let product2 = {StateName:state,
+                Date:date,
+                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
+                ...product};
             return product2;
+            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
         });
 
         const result = new ResultVo(0, "success");
@@ -297,10 +311,24 @@ export class AdminController {
         const creators = await getConnection().getRepository(Creator).find();
 
         const products2 = products.map(product => {
-            let product2 = {CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+            let state = '';
+            switch(product.State){
+                case -1 : state = "미승인";
+                    break;
+                case 0 : state = "심사중";
+                    break;
+                case 1: state="승인";
+                    break;
+            }
+            let date = product.P_Date.toLocaleString();
+            let product2 = {StateName:state,
+                Date:date,
+                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
                 CateName:categorys[(product.categoryCateID-1)].Cate_Name,
                 ...product};
             return product2;
+            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
         });
 
         const result = new ResultVo(0, "success");

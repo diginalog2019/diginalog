@@ -36,10 +36,10 @@ class Menu extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink to="/heroes" className="nav-link">Product</NavLink>
+                <NavLink to="/products" className="nav-link">Product</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/scoreboard" className="nav-link">Creator</NavLink>
+                <NavLink to="/creators" className="nav-link">Creator</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink to="/admin" className="nav-link">Admin</NavLink>
