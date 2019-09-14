@@ -45,7 +45,7 @@ class Menu extends Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    <NavLink to="/Creator/Creators">Search Creator</NavLink>
+                    <NavLink to="/Creator/SearchCreators">Search Creator</NavLink>
                   </DropdownItem>
                   <DropdownItem>
                     <NavLink to="/Creator/register" className="nav-link">Register</NavLink>

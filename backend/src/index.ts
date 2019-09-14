@@ -1,5 +1,6 @@
 import express from 'express';
 import router from './router';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
@@ -9,6 +10,7 @@ import {Category} from "./entity/Category";
 import {Hash} from "crypto";
 
 const app = express();
+app.use(cors());
 
 createConnection().then(async connection => {
 

@@ -3,44 +3,60 @@ import api from '../utils/api';
 import './Creators.module.scss';
 import Pagination from 'rc-pagination';
 import 'rc-pagination/dist/rc-pagination.css';
+import CreatorInfo from './CreatorInfo';
 
-class Creators extends Component {
+class SearchCreators extends Component {
+  _isMounted = false;
   state = {
     pageSize: 10,
     totalCount: 115,
     currentPage: 1,
-    product: [],
+    products: {
+      P_Name:'',
+      P_Price:'',
+      creatorCID:'',
+      State:''
+    },
     creators:{
       C_ID: '',
-      CID:'',
+      CID:''
     },
     keyword:'',
+    filteredProducts: {
+      P_Name:'',
+      P_Price:'',
+      creatorCID:'',
+      State:''
+    },
     initialState: false,
-    isFind: false
-  }
+    index:-1,
+  };
 
   componentDidMount() {
+    this._isMounted = true;
     this.getCreatorsInfo();
   }
   componentWillReceiveProps(newProps) {
+    this._isMounted = false;
     console.log('componentWillReceiveProps:', newProps);
     this.getCreatorsInfo();
   }
   getCreatorsInfo = async() => {
-    let response = await api.get(`/api/creator/creatorsInfo?start_index=
-      ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
-    this.setState({
-      creators: response.data.data
-    });
+    let response = await api.get(`/api/creator/creatorsInfo`);
+    if(this._isMounted){
+      this.setState({
+        creators: response.data.data
+      });
+    }
   };
+
   search = (e) => {
     e.preventDefault();
-    console.log('search');
-    let find = this.state.creators.find(creator => (
+    let find = this.state.creators.findIndex(creator => (
       creator.C_ID === this.state.keyword
     ));
     console.log(find);
-    this.setState({isFind: find !== undefined});
+    this.setState({index:find});
   };
   handleText = (e, key) => {
     this.setState({[key]: e.target.value});
@@ -61,27 +77,11 @@ class Creators extends Component {
               </div>
           </div>
         </form>
-        <p>
-          {this.state.C_ID}
-        </p>
         {
-          this.state.initialState ? this.state.isFind ? "Found" : "Not Found" : " "
+          this.state.initialState ? this.state.index!==-1 ? <CreatorInfo creatorCID={this.state.index+1}/>
+            : "일치하는 ID가 없습니다."
+            : " "
         }
-      {/*  <div className="card-columns">*/}
-      {/*  {this.state.product.map(product => (*/}
-      {/*    <div className="card" key={product.creatorCID}>*/}
-      {/*      <div className="card" key={product.creatorCID}>*/}
-      {/*        <img src={product.P_TitleIMG ? product.P_TitleIMG : process.env.PUBLIC_URL + '/images/24px.svg'}*/}
-      {/*             style={{width: '100%'}} alt={product.P_Name}></img>*/}
-      {/*        <div className="card-body">*/}
-      {/*          <h5 className="card-title">{product.P_Name}</h5>*/}
-      {/*          <p className="card-text">price: {product.P_Price}</p>*/}
-      {/*          <p className="card-text">creator: {product.creatorCID}</p>*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  ))}*/}
-      {/*</div>*/}
         <Pagination total={this.state.totalCount} current={this.state.currentPage} pageSize={this.state.pageSize}
                     onChange={this.onChange} className="d-flex justify-content-center"/>
       </>
@@ -91,4 +91,4 @@ class Creators extends Component {
 
 
 
-export default Creators;
+export default SearchCreators;

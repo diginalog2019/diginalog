@@ -35,7 +35,26 @@ export class CreatorController{
         result.total = total;
         res.send(result);
     }
-    static searchCreatorCID = async (req, res) => {
-        //C_ID 를 CID로 바꿔서 product에서 찾기 
+    static getAllCreatorsInfo = async (req, res) => {
+        const options = {};
+        options['order'] = {CID: 'ASC'};
+
+        let creators = await  getConnection().getRepository(Creator).find(options);
+        const total = await getConnection().getRepository(Product).count();
+
+        console.log(creators);
+        const result = new ResultVo(0,"success");
+        result.data = creators;
+        result.total = total;
+        res.send(result);
+    }
+    static getCreatorProduct = async (req,res) => {
+        console.log(req.params);
+        const {creatorCID} = req.params;
+
+        const options = {relations: ["creator"], where: [{creatorCID}]};
+
+        const products = await getConnection().getRepository(Product).find(options);
+        res.send(products);
     }
 }
