@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Home from "./Home";
 import Menu from "./Menu";
-import Register from "../Creator/Register";
+import {Register} from "./Creator/Register";
 
 export class Root extends Component {
   render() {

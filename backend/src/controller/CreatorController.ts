@@ -7,18 +7,16 @@ import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class CreatorController {
-    /* Kwon Na Hyun : 2019.09.01 && 2019.09.13 ------------------------------------------*/
-    static addPhoto = async (req, res) => {
+    /* Kwon Na Hyun : 2019.09.01 && 2019.09.15 ------------------------------------------*/
+    static uploadFile = async (req, res) => {
         console.log(req.file);
-        // s3 upload configuring parameters
+
         const params = {
             Bucket: 'diginalog-s3',
+            Key : "P_File/" + Date.now() + "_" + req.file.originalname,
             Body : req.file.buffer,
-            Key : "photo/" + Date.now() + "_" + req.file.originalname,
-            ContentType: req.file.mimetype,
-            ACL: 'public-read-write'
+            ACL: 'public-read'
         };
-
         let response, result;
         try {
             response = await s3.upload(params).promise();
@@ -37,14 +35,14 @@ export class CreatorController {
     }
     /* Kwon Na Hyun : 2019.09.01 fin------------------------------------------*/
     static registerProduct = async (req, res) => {
-        const {CID, C_ID, C_Nicknam, C_Email, C_Page, products} = req.body;
+        const {CID, C_ID, C_Nickname, C_Email, C_Page, products} = req.body;
 
         const newCreator = new Creator();
-        newCreator.CID = CID;
-        newCreator.C_ID = C_ID;
-        newCreator.C_Nickname = C_Nicknam;
-        newCreator.C_Email = C_Email;
-        newCreator.C_Page = C_Page;
+        //newCreator.CID = CID;
+        //newCreator.C_ID = C_ID;
+        newCreator.C_Nickname = C_Nickname;
+        //newCreator.C_Email = C_Email;
+        //newCreator.C_Page = C_Page;
 
         await getConnection().getRepository(Creator).save(newCreator);
 
@@ -52,14 +50,16 @@ export class CreatorController {
         if (products && products.length > 0) {
             const newProducts = products.map(product => {
                 const p = new Product();
+                //p.PID = product.PID;
                 p.P_Name = product.P_Name;
                 p.P_Date = product.P_Date;
                 p.P_Price = product.P_Price;
                 p.P_Extension = product.P_Extension;
                 p.P_Size = product.P_Size;
-                p.P_StarPoint = product.P_StarPoint;
-                p.P_DetailIMG = product.P_DetailIMG;
-                p.P_TitleIMG = product.P_TitleIMG ;
+                p.P_File = product.P_File;
+                //p.P_StarPoint = product.P_StarPoint;
+                //p.P_DetailIMG = product.P_DetailIMG;
+               // p.P_TitleIMG = product.P_TitleIMG ;
                 p.creator = newCreator;  // relation key
                 return p;
             })
