@@ -50,21 +50,18 @@ class AdminProducts extends Component {
     this.props.history.push(`/admin/product/:id`);*/
   }
 
-  handleSubmitClick = (event, id) =>{
+  handleChange = (event, id) =>{
     event.preventDefault();
     this.setState({changeStateProduct:id});
   }
-  submit = (e) => {
-    e.preventDefault();
-
-    console.log(this.state.changeStateProduct);
+  submit = (e, id) => {
+    //e.preventDefault();
     const sendForm = {pid:this.state.changeStateProduct, state:1};
     if (window.confirm('승인하시겠습니까?')) {
       api.put('/api/admin/setState', sendForm)
         .then(response => {
           console.log(response.data);
         });
-      this.render();
     }
   }
 
@@ -96,7 +93,7 @@ class AdminProducts extends Component {
             {this.state.products.map(product => (
               <tr>
                 <th scope="row">{product.PID}</th>
-                <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
+                <td key={product.PID} onClick={(e) => this.handleClick(e, product.PID)} style={{cursor: 'pointer'}}>
                   {product.P_Name}</td>
                 <td>{product.Date}</td>
                 <td>{product.P_Price}</td>
@@ -108,8 +105,8 @@ class AdminProducts extends Component {
                 <td>{product.CateName}</td>
                 <td>{product.CreatorName}</td>
                 <div className="m-3 d-flex justify-content-center">
-                  <form onSubmit={this.submit}>
-                    <button type="submit" className="btn btn-outline-primary" onClick={(e) => this.handleSubmitClick(e, product.id)}>승인</button>
+                  <form onMouseEnter={(e)=>this.handleChange(e, product.PID)} onSubmit={(e)=>this.submit(e, product.PID)}>
+                    <button type="submit" className="btn btn-outline-primary">승인</button>
                   </form>
                 </div>
               </tr>
@@ -125,7 +122,7 @@ class AdminProducts extends Component {
 }
 
 let mapStateToProps = (dispatch) => {
-  // refreshList: () => dispatch(refreshList())
+   //refreshList: () => dispatch(refreshList())
 }
 
 export default connect(null, mapStateToProps)(AdminProducts);

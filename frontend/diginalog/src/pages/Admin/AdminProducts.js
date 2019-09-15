@@ -48,6 +48,19 @@ class AdminProducts extends Component {
     this.props.history.push(`/heroes/hero/${id}`);
   }
 
+  handleDelete = (e, id) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      api.delete(`/api/admin/hero?id=${id}`)
+        .then(response => {
+          console.log(response.data);
+          this.props.history.push('/heroes/hero'); // this.props.router.push('/heroes/hero'); 3.0.0+
+
+          // publish to parent
+          //this.props.refreshHero();
+        });
+    }
+  }
+
   render() {
     return (
       <>
@@ -65,28 +78,32 @@ class AdminProducts extends Component {
               <th scope="col">확장자</th>
               <th scope="col">해상도</th>
               <th scope="col">별점</th>
-              <th scope="col">디테일</th>
-              <th scope="col">타이틀</th>
+              {/*<th scope="col">디테일</th>
+              <th scope="col">타이틀</th>*/}
               <th scope="col">카테고리</th>
               <th scope="col">작가</th>
               <th scope="col">상태</th>
+              <th scope="col">삭제</th>
             </tr>
             </thead>
             <tbody>
               {this.state.products.map(product => (
-                    <tr key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
+                    <tr>
                       <th scope="row">{product.PID}</th>
-                      <td>{product.P_Name}</td>
+                      <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>{product.P_Name}</td>
                       <td>{product.Date}</td>
                       <td>{product.P_Price}</td>
                       <td>{product.P_Extension}</td>
                       <td>{product.P_Size}</td>
                       <td>{product.P_StarPoint}</td>
-                      <td>{product.P_DetailIMG}</td>
-                      <td>{product.P_TitleIMG}</td>
+                      {/*<td>{product.P_DetailIMG}</td>
+                      <td>{product.P_TitleIMG}</td>*/}
                       <td>{product.CateName}</td>
                       <td>{product.CreatorName}</td>
                       <td>{product.StateName}</td>
+                      <div className="m-3 d-flex justify-content-center">
+                        <button className="btn btn-outline-danger ml-3" onClick={(e) => this.handleDelete(e, this.props.match.params['id'])}>삭제</button>
+                      </div>
                     </tr>
               ))}
             </tbody>

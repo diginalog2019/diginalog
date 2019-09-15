@@ -353,5 +353,58 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
-    // Shi Ha Yeon : 2019.09.01 12:40 Fin ----------------------------------------------------------------------
+    static removeProduct = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
+        ////////////////////////////////
+        const options = {relation:["products"], where: [{id}], take: 1};
+        const product = await getConnection().getRepository(Product).findOne(options);
+        console.log(product);
+        // s3 upload configuring parameters
+        /*const params = {
+            Bucket: this.BUCKET,
+            Key: file.name
+        };
+
+        S3Controller.getS3Bucket().deleteObject(params,  (err, data) => {
+            if (err) {
+                console.log('There was an error deleting your file: ', err.message);
+                return;
+            }
+            console.log('Successfully deleted file.');
+        });
+        const params = {
+            Bucket: 'diginalog-s3',
+            Body : req.file.buffer,
+            Key : "photo/" + Date.now() + "_" + req.file.originalname,
+            ContentType: req.file.mimetype,
+            ACL: 'public-read-write'
+        };
+
+        let response, result;
+        try {
+            response = await s3.upload(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
+
+        result = new ResultVo(0, 'success');
+        result.data = response.Location;
+
+        res.send(result);*/
+        /////////////////////////////////////
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Product)
+            .where("PID = :id", { id })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    // Shi Ha Yeon : 2019.09.15 Fin ----------------------------------------------------------------------
 }

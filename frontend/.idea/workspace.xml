@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5d21508-1700-434a-a862-faaa0d4f5aaa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.module.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diginalog/src/redux/reducers/admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/controller/AdminController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/controller/AdminController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminIndex.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminIndex.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Root.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Root.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/redux/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/redux/actionTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/redux/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/redux/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/redux/reducers/testReducer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/redux/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -39,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="24" column="19" lean-forward="true" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+            <state relative-caret-position="150">
+              <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -48,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="192">
-              <caret line="103" column="31" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="31" />
+              <caret line="104" column="58" selection-start-line="104" selection-start-column="58" selection-end-line="104" selection-end-column="58" />
               <folding>
                 <element signature="e#68#99#0" expanded="true" />
               </folding>
@@ -91,17 +80,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/diginalog/public/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-315" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="111" column="130" selection-start-line="111" selection-start-column="130" selection-end-line="111" selection-end-column="130" />
+            <state relative-caret-position="162">
+              <caret line="110" column="22" lean-forward="true" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
               <folding>
                 <element signature="e#68#99#0" expanded="true" />
               </folding>
@@ -165,7 +147,6 @@
         <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.scss" />
         <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.module.scss" />
         <option value="$PROJECT_DIR$/diginalog/src/pages/Root.js" />
-        <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js" />
         <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminIndex.js" />
         <option value="$PROJECT_DIR$/diginalog/src/redux/actions.js" />
         <option value="$PROJECT_DIR$/diginalog/src/redux/actionTypes.js" />
@@ -173,6 +154,7 @@
         <option value="$PROJECT_DIR$/diginalog/src/redux/store.js" />
         <option value="$PROJECT_DIR$/diginalog/src/pages/Menu.js" />
         <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js" />
+        <option value="$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js" />
       </list>
     </option>
   </component>
@@ -261,18 +243,18 @@
       <workItem from="1565934474748" duration="609000" />
       <workItem from="1566782878612" duration="5842000" />
       <workItem from="1567096480166" duration="686000" />
-      <workItem from="1568080887492" duration="17532000" />
+      <workItem from="1568080887492" duration="22305000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24669000" />
+    <option name="totallyTimeSpent" value="29442000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="735" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19554849" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19554849" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -284,7 +266,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.29401994" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.29401994" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -429,20 +411,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="103" column="31" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="31" />
-          <folding>
-            <element signature="e#68#99#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminIndex.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="24" column="19" lean-forward="true" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+        <state relative-caret-position="150">
+          <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
@@ -451,8 +423,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminUnapproved.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="111" column="130" selection-start-line="111" selection-start-column="130" selection-end-line="111" selection-end-column="130" />
+        <state relative-caret-position="162">
+          <caret line="110" column="22" lean-forward="true" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
+          <folding>
+            <element signature="e#68#99#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Admin/AdminProducts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="104" column="58" selection-start-line="104" selection-start-column="58" selection-end-line="104" selection-end-column="58" />
           <folding>
             <element signature="e#68#99#0" expanded="true" />
           </folding>
