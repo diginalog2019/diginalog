@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {AdminController} from "../controller/AdminController";
+import {Admin} from "typeorm";
 
 var multer = require('multer');
 const routes = Router();
@@ -19,5 +20,6 @@ routes.get('/products', AdminController.getAllProducts);
 routes.get('/waitingProducts', AdminController.getWaitingProducts);
 routes.put('/setState', AdminController.setState);
 routes.delete('/removeProduct', AdminController.removeProduct);
-// Shi Ha Yeon : Fin -----------------------------------------------------
+routes.get('/creators', AdminController.getAllCreators);
+// Shi Ha Yeon : 2019.09.16 Fin -----------------------------------------------------
 export default routes;

@@ -394,7 +394,7 @@ export class AdminController {
 
         params = {
             Bucket: 'diginalog-s3',
-            Key: "P_File/" + id+".pdf",
+            Key: "P_File/" + id + ".pdf",
         };
         try {
             response = await s3.deleteObject(params).promise();
@@ -405,15 +405,36 @@ export class AdminController {
             res.send(result);
         }
 
-        /*await getConnection()
+        await getConnection()
             .createQueryBuilder()
-          exi  .delete()
+            .delete()
             .from(Product)
             .where("PID = :id", { id })
-            .execute();*/
+            .execute();
 
-        //const result = new ResultVo(0, 'success');
-        //res.send(result);
+        const result2 = new ResultVo(0, 'success');
+        res.send(result2);
     }
-    // Shi Ha Yeon : 2019.09.15 Fin ----------------------------------------------------------------------
+    static getAllCreators = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {CID: 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let creators = await getConnection().getRepository(Creator).find(options);
+
+        const total = await getConnection().getRepository(Creator).count();
+
+        const result = new ResultVo(0, "success");
+        result.data = creators;
+        result.total = total;
+        res.send(result);
+    }
+    // Shi Ha Yeon : 2019.09.16 Fin ----------------------------------------------------------------------
 }

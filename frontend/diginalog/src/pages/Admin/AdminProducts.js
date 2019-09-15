@@ -13,7 +13,8 @@ class AdminProducts extends Component {
     pageSize: 10,
     totalCount: 100,
     currentPage: 1,
-    products: []
+    products: [],
+    deleteProduct:0
   }
 
   componentDidMount() {
@@ -43,17 +44,22 @@ class AdminProducts extends Component {
   }
 
   handleClick = (event, id) => {
-    console.log(event, id);
-    event.preventDefault();
-    this.props.history.push(`/heroes/hero/${id}`);
+    // console.log(event, id);
+    // event.preventDefault();
+    // this.props.history.push(`/product/${id}`);
   }
 
-  handleDelete = (e, id) => {
+  handleChange = (event, id) =>{
+    event.preventDefault();
+    this.setState({deleteProduct:id});
+  }
+
+  handleDelete = (e) => {
     if (window.confirm('삭제하시겠습니까?')) {
-      api.delete(`/api/admin/hero?id=${id}`)
+      api.delete(`/api/admin/removeProduct?id=${this.state.deleteProduct}`)
         .then(response => {
           console.log(response.data);
-          this.props.history.push('/heroes/hero'); // this.props.router.push('/heroes/hero'); 3.0.0+
+          //this.props.history.push('/heroes/hero'); // this.props.router.push('/heroes/hero'); 3.0.0+
 
           // publish to parent
           //this.props.refreshHero();
@@ -90,7 +96,8 @@ class AdminProducts extends Component {
               {this.state.products.map(product => (
                     <tr>
                       <th scope="row">{product.PID}</th>
-                      <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>{product.P_Name}</td>
+                      <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
+                        {product.P_Name}</td>
                       <td>{product.Date}</td>
                       <td>{product.P_Price}</td>
                       <td>{product.P_Extension}</td>
@@ -102,7 +109,10 @@ class AdminProducts extends Component {
                       <td>{product.CreatorName}</td>
                       <td>{product.StateName}</td>
                       <div className="m-3 d-flex justify-content-center">
-                        <button className="btn btn-outline-danger ml-3" onClick={(e) => this.handleDelete(e, this.props.match.params['id'])}>삭제</button>
+                        <form onMouseEnter={(e)=>this.handleChange(e, product.PID)}
+                              onClick={(e) => this.handleDelete(e)}>
+                          <button type="submit" className="btn btn-outline-danger ml-3" >삭제</button>
+                        </form>
                       </div>
                     </tr>
               ))}
