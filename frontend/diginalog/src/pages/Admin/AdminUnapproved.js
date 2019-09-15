@@ -1,14 +1,14 @@
 import React,{Component} from "react";
 //import axios from "axios";
 import api from '../utils/api';
-import './AdminProducts.module.scss'
+import './AdminUnapproved.module.scss'
 import Pagination from 'rc-pagination';
 import 'rc-pagination/dist/rc-pagination.css';
 import {Route, Switch} from "react-router-dom";
 // import View from "../hero/View";
 // import Hero from "../hero/Hero";
 import {connect} from "react-redux";
-class AdminProducts extends Component {
+class AdminUnapprovedProducts extends Component {
   state = {
     pageSize: 10,
     totalCount: 100,
@@ -19,6 +19,10 @@ class AdminProducts extends Component {
 
   componentDidMount() {
     this.getWaitingProducts();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -125,4 +129,4 @@ let mapStateToProps = (dispatch) => {
    //refreshList: () => dispatch(refreshList())
 }
 
-export default connect(null, mapStateToProps)(AdminProducts);
+export default connect(null, mapStateToProps)(AdminUnapprovedProducts);

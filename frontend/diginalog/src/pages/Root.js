@@ -14,7 +14,7 @@ export class Root extends Component {
             <Switch>
               <Route exact path="/" component={Home}></Route>
               <Route path="/admin" component={AdminIndex}></Route>
-              {/*<Route path="/admin/products" component={AdminProducts}></Route>*/}
+
             </Switch>
           </div>
 

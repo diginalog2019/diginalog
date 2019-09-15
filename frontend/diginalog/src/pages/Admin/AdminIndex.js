@@ -14,6 +14,7 @@ import {
 import "./AdminIndex.scss"
 import AdminProducts from "./AdminProducts";
 import AdminUnapproved from "./AdminUnapproved";
+import AdminCreators from "./AdminCreators";
 export class AdminIndex extends Component {
   render() {
     return (
@@ -25,11 +26,15 @@ export class AdminIndex extends Component {
           <NavItem>
             <NavLink to="/admin/unapproved" className="nav-link">Unapproved</NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink to="/admin/creators" className="nav-link">Creators</NavLink>
+          </NavItem>
         </Nav>
         <Switch>
           {/*<Route path="/heroes/hero" component={Heroes}></Route>*/}
           <Route path="/admin/products" component={AdminProducts}></Route>
           <Route path="/admin/unapproved" component={AdminUnapproved}></Route>
+          <Route path="/admin/creators" component={AdminCreators}></Route>
           <Route path="/admin" render={()=><Redirect to="/admin" />}></Route>
         </Switch>
       </>

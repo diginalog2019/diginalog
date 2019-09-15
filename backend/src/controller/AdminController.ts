@@ -273,9 +273,69 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
+    // Shi Ha Yeon : 2019.09.15 11:57 ---------------------------------------------------------------
     static removeCreator = async (req, res) => {
         console.log(req);
         const {id} = req.query;
+
+        let products = await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("creatorCID = :id", {id})
+            .execute();
+
+        products.forEach(product => {
+            // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
+            const titleNum = product.P_TitleIMG;
+            const detailNum = product.P_DetailIMG;
+            const fileNum = product.P_File;
+
+            // s3 upload configuring parameters
+            let params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_TitleIMG/" + id + ".png"
+            };
+            let response, result;
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+
+            params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_DetailIMG/" + id + ".png",
+            };
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+
+            params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_File/" + id + ".pdf",
+            };
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+        })
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Product)
+            .where("creatorCID = :id", { id })
+            .execute();
 
         await getConnection()
             .createQueryBuilder()
@@ -287,7 +347,7 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
-
+    //Shi Ha Yeon : 2019.09.16 Fin ---------------------------------------------------------------
     // Shi Ha Yeon : 2019.09.01 11:18 ----------------------------------------------------------------------
     static getWaitingProducts = async (req, res) => {
         const {start_index, page_size} = req.query;
