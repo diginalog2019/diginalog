@@ -356,34 +356,22 @@ export class AdminController {
     static removeProduct = async (req, res) => {
         console.log(req);
         const {id} = req.query;
-        ////////////////////////////////
         const options = {relation:["products"], where: [{id}], take: 1};
         const product = await getConnection().getRepository(Product).findOne(options);
-        console.log(product);
+
+        // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
+        const titleNum = product.P_TitleIMG;
+        const detailNum = product.P_DetailIMG;
+        const fileNum = product.P_File;
+
         // s3 upload configuring parameters
-        /*const params = {
-            Bucket: this.BUCKET,
-            Key: file.name
-        };
-
-        S3Controller.getS3Bucket().deleteObject(params,  (err, data) => {
-            if (err) {
-                console.log('There was an error deleting your file: ', err.message);
-                return;
-            }
-            console.log('Successfully deleted file.');
-        });
-        const params = {
+        let params = {
             Bucket: 'diginalog-s3',
-            Body : req.file.buffer,
-            Key : "photo/" + Date.now() + "_" + req.file.originalname,
-            ContentType: req.file.mimetype,
-            ACL: 'public-read-write'
+            Key: "P_TitleIMG/" + id + ".png"
         };
-
         let response, result;
         try {
-            response = await s3.upload(params).promise();
+            response = await s3.deleteObject(params).promise();
             console.log(response);
         } catch (err) {
             console.log(err);
@@ -391,20 +379,41 @@ export class AdminController {
             res.send(result);
         }
 
-        result = new ResultVo(0, 'success');
-        result.data = response.Location;
+        params = {
+            Bucket: 'diginalog-s3',
+            Key: "P_DetailIMG/" + id + ".png",
+        };
+        try {
+            response = await s3.deleteObject(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
 
-        res.send(result);*/
-        /////////////////////////////////////
-        await getConnection()
+        params = {
+            Bucket: 'diginalog-s3',
+            Key: "P_File/" + id+".pdf",
+        };
+        try {
+            response = await s3.deleteObject(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
+
+        /*await getConnection()
             .createQueryBuilder()
-            .delete()
+          exi  .delete()
             .from(Product)
             .where("PID = :id", { id })
-            .execute();
+            .execute();*/
 
-        const result = new ResultVo(0, 'success');
-        res.send(result);
+        //const result = new ResultVo(0, 'success');
+        //res.send(result);
     }
     // Shi Ha Yeon : 2019.09.15 Fin ----------------------------------------------------------------------
 }
