@@ -21,5 +21,6 @@ routes.get('/waitingProducts', AdminController.getWaitingProducts);
 routes.put('/setState', AdminController.setState);
 routes.delete('/removeProduct', AdminController.removeProduct);
 routes.get('/creators', AdminController.getAllCreators);
-// Shi Ha Yeon : 2019.09.16 Fin -----------------------------------------------------
+routes.get('/product', AdminController.getProduct);
+// Shi Ha Yeon : 2019.09.16 Fin --------------------------------------------
 export default routes;

@@ -15,6 +15,7 @@ import "./AdminIndex.scss"
 import AdminProducts from "./AdminProducts";
 import AdminUnapproved from "./AdminUnapproved";
 import AdminCreators from "./AdminCreators";
+import AdminProduct from "./AdminProduct";
 export class AdminIndex extends Component {
   render() {
     return (
@@ -35,6 +36,7 @@ export class AdminIndex extends Component {
           <Route path="/admin/products" component={AdminProducts}></Route>
           <Route path="/admin/unapproved" component={AdminUnapproved}></Route>
           <Route path="/admin/creators" component={AdminCreators}></Route>
+          <Route path="/admin/product" component={AdminProduct}></Route>
           <Route path="/admin" render={()=><Redirect to="/admin" />}></Route>
         </Switch>
       </>

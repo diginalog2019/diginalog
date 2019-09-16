@@ -496,5 +496,24 @@ export class AdminController {
         result.total = total;
         res.send(result);
     }
-    // Shi Ha Yeon : 2019.09.16 Fin ----------------------------------------------------------------------
+    static getProduct = async (req, res) => {
+
+        console.log(req.query);
+        const {id} = req.query;
+
+        console.log("pid = "+id);
+
+        const options = {relation:["category"], where: {PID: id}};
+        let product = await getConnection().getRepository(Product).findOne(options);
+
+        const category = await getConnection().getRepository(Category).findOne({where:{Cate_ID:product.categoryCateID}});
+        const creator = await getConnection().getRepository(Creator).findOne({where:{CID:product.creatorCID}});
+
+        product = {...product,category,creator};
+
+        const result = new ResultVo(0,"success");
+        result.data = product;
+        res.send(result);
+    }
+    // Shi Ha Yeon : 2019.09.17 Fin ----------------------------------------------------------------------
 }

@@ -46,7 +46,7 @@ class AdminProducts extends Component {
   handleClick = (event, id) => {
     // console.log(event, id);
     // event.preventDefault();
-    // this.props.history.push(`/product/${id}`);
+    this.props.history.push(`/admin/product?id=${id}`);
   }
 
   handleChange = (event, id) =>{
@@ -96,7 +96,7 @@ class AdminProducts extends Component {
               {this.state.products.map(product => (
                 <tr>
                   <th scope="row">{product.PID}</th>
-                  <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
+                  <td key={product.id} onClick={(e) => this.handleClick(e, product.PID)} style={{cursor: 'pointer'}}>
                     {product.P_Name}</td>
                   <td>{product.Date}</td>
                   <td>{product.P_Price}</td>
