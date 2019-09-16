@@ -21,20 +21,23 @@ export class AdminIndex extends Component {
   render() {
     return (
       <>
-        <Nav className="mb-3">
-          <NavItem>
-            <NavLink to="/admin/products" className="nav-link">Products</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/admin/unapproved" className="nav-link">Unapproved</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/admin/creators" className="nav-link">Creators</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/admin/users" className="nav-link">Users</NavLink>
-          </NavItem>
-        </Nav>
+        <div class="menu">
+          <Nav className="mb-3 flex-column">
+            <NavItem>
+              <NavLink to="/admin/products" className="nav-link">Products</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/admin/unapproved" className="nav-link">Unapproved</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/admin/creators" className="nav-link">Creators</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/admin/users" className="nav-link">Users</NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        <div class="contents">
         <Switch>
           {/*<Route path="/heroes/hero" component={Heroes}></Route>*/}
           <Route path="/admin/products" component={AdminProducts}></Route>
@@ -44,6 +47,7 @@ export class AdminIndex extends Component {
           <Route path="/admin/users" component={AdminUsers}></Route>
           <Route path="/admin" render={()=><Redirect to="/admin" />}></Route>
         </Switch>
+        </div>
       </>
     )
   }
