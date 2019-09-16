@@ -8,10 +8,10 @@ class Product extends Component {
     componentDidMount() {
         let params = queryString.parse(this.props.location.search);
         console.log(params);
-        this.getHero(params.id);
+        this.getProduct(params.id);
     }
 
-    getHero = async (id) => {
+    getProduct = async (id) => {
         let response = await api.get(`/api/user/product?id=${id}`);
         console.log("id = "+id);
         console.log(response);
