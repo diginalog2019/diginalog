@@ -24,7 +24,7 @@ export default class UserIndex extends Component {
                 <Switch>
                     <Route path ="/user/products" component={UserProducts}></Route>
                     <Route path="/user/test" component={Test}></Route>
-                    <Route path="/product" component={Product}></Route>
+                    <Route path="/user/product" component={Product}></Route>
                     <Route path ="/user" render = {()=><Redirect to="/user/products"/>}/>
                 </Switch>
             </>

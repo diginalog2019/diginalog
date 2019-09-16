@@ -41,13 +41,13 @@ class UserProducts extends Component {
     handleClick = (event, id) => {
         console.log("handleClick event");
         console.log(event, id);
-        this.props.history.push(`/product?id=${id}`);
+        this.props.history.push(`/user/product?id=${id}`);
     }
     render() {
         return (
             <>
                 <Switch>
-                    <Route path="/product" component={Product}></Route>
+                    <Route path="/user/product" component={Product}></Route>
                 </Switch>
                 <div className="card-deck">
                     {this.state.products.map(product => (

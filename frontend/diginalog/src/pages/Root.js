@@ -15,7 +15,7 @@ export class Root extends Component {
             <Switch>
               <Route exact path="/" component={Home}></Route>
                 <Route path="/user" component={UserIndex}></Route>
-              <Route path="/product" component={UserIndex}></Route>
+              <Route path="/user/product" component={UserIndex}></Route>
             </Switch>
           </div>
 
