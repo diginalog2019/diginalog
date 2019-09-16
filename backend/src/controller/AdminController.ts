@@ -35,6 +35,7 @@ import {Category} from "../entity/Category";
 import {Creator} from "../entity/Creator";
 import {getConnection} from "typeorm";
 import {Product} from "../entity/Product";
+import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
@@ -513,6 +514,47 @@ export class AdminController {
 
         const result = new ResultVo(0,"success");
         result.data = product;
+        res.send(result);
+    }
+    static getAllUsers = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {UID : 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let users = await getConnection().getRepository(User).find(options);
+
+        const total = await getConnection().getRepository(User).count();
+
+        const users2 = users.map(user => {
+            let date = user.U_Date.toLocaleString();
+            let user2 = {Date:date, ...user};
+            return user2;
+        });
+
+        const result = new ResultVo(0, "success");
+        result.data = users2;
+        result.total = total;
+        res.send(result);
+    }
+    static removeUser = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(User)
+            .where("UID = :id", { id })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
         res.send(result);
     }
     // Shi Ha Yeon : 2019.09.17 Fin ----------------------------------------------------------------------

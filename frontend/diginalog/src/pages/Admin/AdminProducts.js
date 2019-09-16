@@ -8,6 +8,7 @@ import {Route, Switch} from "react-router-dom";
 // import View from "../hero/View";
 // import Hero from "../hero/Hero";
 import {connect} from "react-redux";
+import AdminProduct from "./AdminProduct";
 class AdminProducts extends Component {
   state = {
     pageSize: 10,
@@ -70,9 +71,9 @@ class AdminProducts extends Component {
   render() {
     return (
       <>
-        <Switch>
-          {/*<Route path="/heroes/hero/:id" component={Hero}></Route>*/}
-        </Switch>
+        {/*<Switch>
+          <Route path="/admin/user/:id" component={AdminProduct}></Route>
+        </Switch>*/}
         <div>
           <table className="table table-striped">
             <thead>

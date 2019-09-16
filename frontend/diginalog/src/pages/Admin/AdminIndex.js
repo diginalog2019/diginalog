@@ -16,6 +16,7 @@ import AdminProducts from "./AdminProducts";
 import AdminUnapproved from "./AdminUnapproved";
 import AdminCreators from "./AdminCreators";
 import AdminProduct from "./AdminProduct";
+import AdminUsers from "./AdminUsers";
 export class AdminIndex extends Component {
   render() {
     return (
@@ -30,6 +31,9 @@ export class AdminIndex extends Component {
           <NavItem>
             <NavLink to="/admin/creators" className="nav-link">Creators</NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink to="/admin/users" className="nav-link">Users</NavLink>
+          </NavItem>
         </Nav>
         <Switch>
           {/*<Route path="/heroes/hero" component={Heroes}></Route>*/}
@@ -37,6 +41,7 @@ export class AdminIndex extends Component {
           <Route path="/admin/unapproved" component={AdminUnapproved}></Route>
           <Route path="/admin/creators" component={AdminCreators}></Route>
           <Route path="/admin/product" component={AdminProduct}></Route>
+          <Route path="/admin/users" component={AdminUsers}></Route>
           <Route path="/admin" render={()=><Redirect to="/admin" />}></Route>
         </Switch>
       </>
