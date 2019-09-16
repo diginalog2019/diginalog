@@ -95,8 +95,7 @@ class AdminCreators extends Component {
                 <td>{creator.C_Email}</td>
                 <td>{creator.C_Page}</td>
                 <div className="m-3 d-flex justify-content-center">
-                  <form onMouseEnter={(e)=>this.handleChange(e, creator.CID)}
-                        onClick={(e) => this.handleDelete(e)}>
+                  <form onMouseEnter={(e) => this.handleChange(e, creator.CID)} onSubmit={(e) => this.handleDelete(e)}>
                     <button type="submit" className="btn btn-outline-danger ml-3" >삭제</button>
                   </form>
                 </div>

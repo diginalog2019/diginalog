@@ -94,27 +94,26 @@ class AdminProducts extends Component {
             </thead>
             <tbody>
               {this.state.products.map(product => (
-                    <tr>
-                      <th scope="row">{product.PID}</th>
-                      <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
-                        {product.P_Name}</td>
-                      <td>{product.Date}</td>
-                      <td>{product.P_Price}</td>
-                      <td>{product.P_Extension}</td>
-                      <td>{product.P_Size}</td>
-                      <td>{product.P_StarPoint}</td>
-                      {/*<td>{product.P_DetailIMG}</td>
-                      <td>{product.P_TitleIMG}</td>*/}
-                      <td>{product.CateName}</td>
-                      <td>{product.CreatorName}</td>
-                      <td>{product.StateName}</td>
-                      <div className="m-3 d-flex justify-content-center">
-                        <form onMouseEnter={(e)=>this.handleChange(e, product.PID)}
-                              onClick={(e) => this.handleDelete(e)}>
-                          <button type="submit" className="btn btn-outline-danger ml-3" >삭제</button>
-                        </form>
-                      </div>
-                    </tr>
+                <tr>
+                  <th scope="row">{product.PID}</th>
+                  <td key={product.id} onClick={(e) => this.handleClick(e, product.id)} style={{cursor: 'pointer'}}>
+                    {product.P_Name}</td>
+                  <td>{product.Date}</td>
+                  <td>{product.P_Price}</td>
+                  <td>{product.P_Extension}</td>
+                  <td>{product.P_Size}</td>
+                  <td>{product.P_StarPoint}</td>
+                 {/* <td>{product.P_DetailIMG}</td>
+                  <td>{product.P_TitleIMG}</td>*/}
+                  <td>{product.CateName}</td>
+                  <td>{product.CreatorName}</td>
+                  <td>{product.StateName}</td>
+                  <div className="m-3 d-flex justify-content-center">
+                    <form onMouseEnter={(e)=>this.handleChange(e, product.PID)} onSubmit={(e) => this.handleDelete(e)}>
+                      <button type="submit" className="btn btn-outline-danger ml-3" >삭제</button>
+                    </form>
+                  </div>
+                </tr>
               ))}
             </tbody>
           </table>

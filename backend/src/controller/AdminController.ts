@@ -282,7 +282,7 @@ export class AdminController {
             .from(Product,"product").where("creatorCID = :id", {id})
             .execute();
 
-        products.forEach(product => {
+        for(const product of products){
             // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
             const titleNum = product.P_TitleIMG;
             const detailNum = product.P_DetailIMG;
@@ -328,7 +328,7 @@ export class AdminController {
                 result = new ResultVo(500, 'S3 error');
                 res.send(result);
             }
-        })
+        }
 
         await getConnection()
             .createQueryBuilder()
