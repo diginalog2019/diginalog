@@ -7,6 +7,11 @@ export class Creator {
     CID: number;
 
     @Column({
+        length:10
+    })
+    C_ID:string;
+
+    @Column({
         length: 10
     })
     C_Nickname: string;
