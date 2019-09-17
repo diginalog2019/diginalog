@@ -7,7 +7,7 @@ import {Product} from "./entity/Product";
 import {Hashtag} from "./entity/Hashtag";
 import {Category} from "./entity/Category";
 import {Hash} from "crypto";
-import cors from 'cors';
+import cors from "cors";
 
 const app = express();
 app.use(cors());

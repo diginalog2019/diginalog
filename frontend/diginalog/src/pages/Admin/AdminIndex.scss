@@ -1,0 +1,17 @@
+.nav-link {
+  color: #666666;
+  &:hover{
+    color: #333333;
+  }
+  &.active {
+    font-weight: bold;
+  }
+}
+.menu{
+  float: left;
+  width: 11%;
+}
+.contents{
+  float: left;
+  width: 89%;
+}
