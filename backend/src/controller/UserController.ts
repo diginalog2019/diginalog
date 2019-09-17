@@ -35,8 +35,6 @@ export class UserController {
 
         const options = { relation:["category"],where: { State: 1 }};
 
-        options['select'] = ["PID", "P_Name", "P_Price", "P_StarPoint", "P_TitleIMG","categoryCateID","creatorCID"];
-
         if (start_index) {
             options['skip'] = start_index;
         }
@@ -67,21 +65,21 @@ export class UserController {
     }
     // Kim Ju Hui : 2019.08.30 Fri Fin-------------------------------------------
     // Kim Ju Hui : 2019.09.17 Tue-------------------------------------------
-    static downloadFile = async(req,res) => {
+    static getFileUrl = async(req, res) => {
 
         console.log(req.query);
-        const {id, extension} = req.query;
+        const {prefix, fileName, extension} = req.query;
 
         //const file = require('fs').createWriteStream('test.png');
 
         // let prefix = 'P_File/';
         // let key = '1.png';
 
-        console.log('P_File/'+id+'.'+extension);
+        console.log('P_File/'+fileName+'.'+extension);
 
         let getParams = {
             Bucket : 'diginalog-s3',
-            Key : 'P_File/'+id+'.'+extension,
+            Key : prefix + fileName +'.'+extension,
             Expires : 60 * 5
         }
 
