@@ -95,23 +95,24 @@ export class AdminController {
     }
     // Shi Ha Yeon : 2019.09.01 11:31 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
-        const {PID, P_Name, P_Date, P_Price, P_Extension,
-            P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
+        const {P_Name, P_Price, P_Extension,
+            P_Size,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
 
         const newProduct = new Product();
-        newProduct.PID = PID;
+        //newProduct.PID = PID;
         newProduct.P_Name = P_Name;
-        newProduct.P_Date = P_Date;
+        //newProduct.P_Date = P_Date;
         newProduct.P_Price = P_Price;
         newProduct.P_Extension = P_Extension;
         newProduct.P_Size = P_Size;
-        newProduct.P_StarPoint = P_StarPoint;
+        newProduct.P_StarPoint = 0;
         newProduct.P_DetailIMG = P_DetailIMG;
         newProduct.P_TitleIMG = P_TitleIMG ;
 
         if (Cate_ID>0) {
             const options = {where:[{Cate_ID}],take:1};
             const c = await getConnection().getRepository(Category).findOne(options);
+            console.log(c);
             newProduct.category = c;
             await getConnection().getRepository(Product).save(newProduct);
         }

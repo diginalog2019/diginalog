@@ -47,6 +47,7 @@ class AdminProducts extends Component {
   handleClick = (event, id) => {
     // console.log(event, id);
     // event.preventDefault();
+    console.log(this.props);
     this.props.history.push(`/admin/product?id=${id}`);
   }
 
