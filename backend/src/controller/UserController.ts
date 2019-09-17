@@ -66,35 +66,32 @@ export class UserController {
         res.send(result);
     }
     // Kim Ju Hui : 2019.08.30 Fri Fin-------------------------------------------
-    // Kim Ju Hui : 2019.09.15 Sun-------------------------------------------
+    // Kim Ju Hui : 2019.09.17 Tue-------------------------------------------
     static downloadFile = async(req,res) => {
 
-        /*const aws = require('aws-sdk');
-        const config = require('../config/aws');*/
+        console.log(req.query);
+        const {id, extension} = req.query;
 
-        (async function() {
-            try {
+        //const file = require('fs').createWriteStream('test.png');
 
-               /* aws.config.setPromisesDependency();
-                aws.config.update({
-                    accessKeyId: config.aws.accessKey,
-                    secretAccessKey: config.aws.secretKey,
-                    region: 'ap-northeast-2',
-                });*/
+        // let prefix = 'P_File/';
+        // let key = '1.png';
 
+        console.log('P_File/'+id+'.'+extension);
 
-                const response = await s3.listObjectsV2({
-                    Bucket: 'diginalog-s3',
-                    Prefix: 'P_File'
-                }).promise();
+        let getParams = {
+            Bucket : 'diginalog-s3',
+            Key : 'P_File/'+id+'.'+extension,
+            Expires : 60 * 5
+        }
 
-                console.log(response);
+        /*let fileStream = s3.getObject(getParams).createReadStream();
+        res.attachment(name+'.'+extension);
+        fileStream.pipe(res);*/
 
-            } catch (e) {
-                console.log('our error',e);
-            }
-        })();
-
+        const url = s3.getSignedUrl('getObject',getParams);
+        console.log(url);
+        res.send(url);
     }
-    // Kim Ju Hui : 2019.09.15 Sun Fin-------------------------------------
+    // Kim Ju Hui : 2019.09.17 Tue Fin-------------------------------------
 }
