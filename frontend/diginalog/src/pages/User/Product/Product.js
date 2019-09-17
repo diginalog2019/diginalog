@@ -43,6 +43,17 @@ class Product extends Component {
     }
     // Kim Ju Hui : 2019.09.16 Mon Fin-------------------------------------------------------------------------
 
+    handleClick = async(event) => {
+        console.log("handleClick event");
+        console.log(event);
+
+        let fileName = this.state.product.PID;
+        let extension = this.state.product.P_Extension;
+        let prefix = 'P_File/';
+        let response = await api.get(`/api/user/download?prefix=${prefix}&fileName=${fileName}&extension=${extension}`);
+        window.location.href = response.data;
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -92,8 +103,7 @@ class Product extends Component {
                                 </div>
                                 <label htmlFor="inputEmail" className="col-sm-2 col-form-label"></label>
                                 <div className="col-sm-10">
-                                <a href="#" className="btn btn-secondary btn-lg active" role="button"
-                                   aria-pressed="true">Download</a>
+                                    <a class="btn btn-primary" onClick={(e) => this.handleClick(e)} role="button" style={{cursor: 'pointer'}}>download</a>
                                 </div>
                             </div>
                             {this.viewPhoto()}
