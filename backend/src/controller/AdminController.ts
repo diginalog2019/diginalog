@@ -36,6 +36,7 @@ import {Creator} from "../entity/Creator";
 import {getConnection} from "typeorm";
 import {Product} from "../entity/Product";
 import {User} from "../entity/User";
+import {Hashtag} from "../entity/Hashtag";
 import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
@@ -555,6 +556,27 @@ export class AdminController {
             .execute();
 
         const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    static getAllHashtags = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {HID : 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let hashtags = await getConnection().getRepository(Hashtag).find(options);
+
+        const total = await getConnection().getRepository(Hashtag).count();
+
+        const result = new ResultVo(0, "success");
+        result.data = hashtags;
+        result.total = total;
         res.send(result);
     }
     // Shi Ha Yeon : 2019.09.17 Fin ----------------------------------------------------------------------

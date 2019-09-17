@@ -24,5 +24,6 @@ routes.get('/creators', AdminController.getAllCreators);
 routes.get('/product', AdminController.getProduct);
 routes.get('/users', AdminController.getAllUsers);
 routes.delete('/removeUser', AdminController.removeUser);
+routes.get('/hashtags', AdminController.getAllHashtags);
 // Shi Ha Yeon : 2019.09.16 Fin --------------------------------------------
 export default routes;
