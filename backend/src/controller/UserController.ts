@@ -2,43 +2,28 @@ import {getConnection} from "typeorm";
 import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
 import {Category} from "../entity/Category";
+import {Product} from "../entity/Product";
+import {Creator} from "../entity/Creator";
 
 export class UserController {
+    // Kim Ju Hui : 2019.09.13 Sat--------------------------------------------
     static getProduct = async (req, res) => {
 
-        console.log(req.params);
-        const {Cate_ID} = req.params;
+        console.log(req.query);
+        const {id} = req.query;
 
-        const options = {relation:["products"], where: [{Cate_ID}], take: 1};
+        console.log("pid = "+id);
 
-        const result = await getConnection().getRepository(Category).findOne(options);
+        const options = {relation:["category"], where: {PID: id}};
+        let product = await getConnection().getRepository(Product).findOne(options);
+
+        const category = await getConnection().getRepository(Category).findOne({where:{Cate_ID:product.categoryCateID}});
+        const creator = await getConnection().getRepository(Creator).findOne({where:{CID:product.creatorCID}});
+
+        product = {...product,category,creator};
+
+        const result = new ResultVo(0,"success");
+        result.data = product;
         res.send(result);
-
-        /*const {start_index, page_size} = req.query;
-        console.log("1");
-        const options = {};
-        options['select'] = ["UID","U_Name"];
-        console.log("2");
-        options['order'] = {UID: 'ASC'};
-        if (start_index) {
-            options['skip'] = start_index;
-            console.log("3");
-        }
-        if (page_size) {
-            options['take'] = page_size;
-            console.log("4");
-        }
-
-        //options['select'] = ["id", "name", "email", "photo"];
-
-        const heroes = await getConnection().getRepository(User).find(options);
-        console.log("5");
-        const total = await getConnection().getRepository(User).count();
-        console.log("6");
-        const result = new ResultVo(0, "success");
-        console.log("7");
-        result.data = heroes;
-        result.total = total;
-        res.send(result);*/
     }
 }

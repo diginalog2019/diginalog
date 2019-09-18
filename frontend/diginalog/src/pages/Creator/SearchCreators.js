@@ -4,8 +4,11 @@ import './Creators.module.scss';
 import Pagination from 'rc-pagination';
 import 'rc-pagination/dist/rc-pagination.css';
 import CreatorInfo from './CreatorInfo';
+import CreatorInfoDetail from "./CreatorInfoDetail";
+import {Route, Switch} from "react-router-dom";
 
 class SearchCreators extends Component {
+  /*---------Jang Jua 2019_09_07------------------------*/
   _isMounted = false;
   state = {
     pageSize: 10,
@@ -78,7 +81,7 @@ class SearchCreators extends Component {
           </div>
         </form>
         {
-          this.state.initialState ? this.state.index!==-1 ? <CreatorInfo creatorCID={this.state.index+1}/>
+          this.state.initialState ? this.state.index!==-1 ? <CreatorInfo creatorCID={this.state.index+1} history={this.props.history}/>
             : "일치하는 ID가 없습니다."
             : " "
         }

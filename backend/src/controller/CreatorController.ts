@@ -57,4 +57,20 @@ export class CreatorController{
         const products = await getConnection().getRepository(Product).find(options);
         res.send(products);
     }
+    static getSingleProduct = async(req,res) => {
+        console.log(req.query);
+        const {id} = req.query;
+
+        const options = {where: {PID: id}};
+        let product = await getConnection().getRepository(Product).findOne(options);
+        const category = await getConnection().getRepository(Category).findOne({where:{Cate_ID:product.categoryCateID}});
+        const creator = await getConnection().getRepository(Creator).findOne({where:{CID:product.creatorCID}});
+
+        product = {...product,category,creator};
+        const result = new ResultVo(0,"success");
+        result.data = product;
+        res.send(result);
+
+
+    }
 }
