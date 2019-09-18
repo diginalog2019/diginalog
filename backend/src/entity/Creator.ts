@@ -7,22 +7,27 @@ export class Creator {
     CID: number;
 
     @Column({
-        length:10
+        length: 10,
+        nullable:true
     })
     C_ID:string;
 
     @Column({
-        length: 10
+        length: 10,
+        nullable:true
+
     })
     C_Nickname: string;
 
     @Column({
-        length: 50
+        length: 50,
+        nullable:true
     })
     C_Email: string;
 
     @Column({
-        length: 50
+        length: 50,
+        nullable:true
     })
     C_Page: string;
 

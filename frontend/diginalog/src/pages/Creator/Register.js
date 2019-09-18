@@ -7,14 +7,14 @@ import axios from "axios";
 export class Register extends Component {
 
     state = {
-        nickname: '',
+        cid:'',
         productName: '',
         price: '',
         date:'',
         extension: '',
         size:'',
-        //detailIMG:'',
-        //titleIMG: '',
+        detailIMG:'',
+        titleIMG: '',
         file: ''
 
     }
@@ -23,7 +23,7 @@ export class Register extends Component {
         this.setState({[key]: e.target.value});
     }
 
-    handleUpload = (e) => {
+    handleUploadFile = (e) => {
         e.preventDefault();
 
         // 선택된 화일이 없으면 리턴
@@ -35,10 +35,46 @@ export class Register extends Component {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         formData.append("filename", e.target.files[0].name);
-        axios.post('/api/creator/file', formData)
+        api.post('/api/creator/file', formData)
             .then(response => {
                 console.log(response.data);
                 this.setState({file: response.data.data});
+            });
+    }
+    handleUploadDetailIMG = (e) => {
+        e.preventDefault();
+
+        // 선택된 화일이 없으면 리턴
+        console.log(e.target.files);
+        if (!e.target.files || e.target.files.length === 0) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("detailIMG", e.target.files[0]);
+        formData.append("filename", e.target.files[0].name);
+        api.post('/api/creator/detailIMG', formData)
+            .then(response => {
+                console.log(response.data);
+                this.setState({detailIMG: response.data.data});
+            });
+    }
+    handleUploadTitleIMG = (e) => {
+        e.preventDefault();
+
+        // 선택된 화일이 없으면 리턴
+        console.log(e.target.files);
+        if (!e.target.files || e.target.files.length === 0) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("titleIMG", e.target.files[0]);
+        formData.append("filename", e.target.files[0].name);
+        api.post('/api/creator/titleIMG', formData)
+            .then(response => {
+                console.log(response.data);
+                this.setState({titleIMG: response.data.data});
             });
     }
 
@@ -53,14 +89,14 @@ export class Register extends Component {
                 console.log(response.data);
                 // form 초기화
                 this.setState({
-                    nickname: '',
+                    cid:'',
                     productName: '',
                     price: '',
                     date:'',
                     extension: '',
                     size:'',
-                    //detailIMG:'',
-                    //titleIMG: '',
+                    detailIMG:'',
+                    titleIMG: '',
                     file: ''
                 });
             });
@@ -75,11 +111,17 @@ export class Register extends Component {
                 </br>
                 <form onSubmit={this.submit}>
                     <div className="form-group mt-1">
-                        <label htmlFor="nickname">Nickname</label>
-                        <input type="text" className="form-control" placeholder="Enter Nickname" id="nickname"
-                               value={this.state.nickname} onChange={(e) => this.handleText(e, 'nickname')} required />
+                        <label htmlFor="cid">ID</label>
+                        <input type="text" className="form-control" placeholder="Enter ID" id="cid"
+                               value={this.state.cid} onChange={(e) => this.handleText(e, 'cid')} required />
                     </div>
 
+                   {/* <div className="form-group mt-1">
+                        <label htmlFor="nickname">Nickname</label>
+                        <input type="text" className="form-control" placeholder="Enter Nickname" id="nickname"
+                               value={this.state.nickname} onChange={(e) => this.handleText(e, 'nickname')} />
+                    </div>
+*/}
                     <div className="form-group mt-1">
                         <label htmlFor="productName">Product Name</label>
                         <input type="productName" className="form-control" placeholder="Enter Product Name" id="productName"
@@ -121,7 +163,7 @@ export class Register extends Component {
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>File</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="file" accept="image/!*" multiple onChange={this.handleUpload} required />
+                            <input type="file" className="custom-file-input" id="file" accept="image/!*" multiple onChange={this.handleUploadFile} required />
                             <label className="custom-file-label" htmlFor="file">Choose File</label>
                         </div>
                         {
@@ -129,11 +171,11 @@ export class Register extends Component {
                         }
                     </div>
 
-{/*
+
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>Detail IMG</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="detailIMG" accept="image/!*" multiple onChange={this.handleUpload}  />
+                            <input type="file" className="custom-file-input" id="detailIMG" accept="image/!*" multiple onChange={this.handleUploadDetailIMG} />
                             <label className="custom-file-label" htmlFor="detailIMG">Choose Detail IMG</label>
                         </div>
                         {
@@ -144,13 +186,13 @@ export class Register extends Component {
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>Title IMG</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="titleIMG" accept="image/!*" multiple onChange={this.handleUpload}  />
+                            <input type="file" className="custom-file-input" id="titleIMG" accept="image/!*" multiple onChange={this.handleUploadTitleIMG}  />
                             <label className="custom-file-label" htmlFor="titleIMG">Choose Title IMG</label>
                         </div>
                         {
                             this.state.titleIMG ? <img src={this.state.titleIMG} alt={this.state.name} style={{width: '200px'}} /> : ''
                         }
-                    </div>*/}
+                    </div>
 
                     <div className="m-3 d-flex justify-content-center">
                         <button type="submit" className="btn btn-outline-primary">Register</button>
