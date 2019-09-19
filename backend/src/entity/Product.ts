@@ -17,7 +17,7 @@ export class Product {
     State: number;
 
     @Column({nullable:true})
-    P_Date: Date; //datetime?
+    P_Date: Date;
 
     @Column({nullable:true})
     P_Price: number;

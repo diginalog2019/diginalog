@@ -17,12 +17,14 @@ export class Creator {
     C_Nickname: string;
 
     @Column({
-        length: 50
+        length: 50,
+        nullable:true
     })
     C_Email: string;
 
     @Column({
-        length: 50
+        length: 50,
+        nullable:true
     })
     C_Page: string;
 
