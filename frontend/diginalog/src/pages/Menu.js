@@ -52,7 +52,6 @@ class Menu extends Component {
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              /* Kwon Na Hyun : 2019.08.31 fin-------------------------------------------*/
 
               <NavItem>
                 <NavLink to="/admin" className="nav-link">Admin</NavLink>
