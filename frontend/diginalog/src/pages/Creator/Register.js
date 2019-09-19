@@ -15,7 +15,8 @@ export class Register extends Component {
         size:'',
         detailIMG:'',
         titleIMG: '',
-        file: ''
+        file: '',
+        cate_id:''
 
     }
 
@@ -97,7 +98,8 @@ export class Register extends Component {
                     size:'',
                     detailIMG:'',
                     titleIMG: '',
-                    file: ''
+                    file: '',
+                    cate_id:''
                 });
             });
     }
@@ -114,6 +116,12 @@ export class Register extends Component {
                         <label htmlFor="cid">ID</label>
                         <input type="text" className="form-control" placeholder="Enter ID" id="cid"
                                value={this.state.cid} onChange={(e) => this.handleText(e, 'cid')} required />
+                    </div>
+
+                    <div className="form-group mt-1">
+                        <label htmlFor="cate_id">Category_ID</label>
+                        <input type="text" className="form-control" placeholder="Enter Category ID" id="cate_id"
+                               value={this.state.cate_id} onChange={(e) => this.handleText(e, 'cate_id')} required />
                     </div>
 
                    {/* <div className="form-group mt-1">
@@ -170,7 +178,6 @@ export class Register extends Component {
                             this.state.file ? <img src={this.state.file} alt={this.state.name} style={{width: '200px'}} /> : ''
                         }
                     </div>
-
 
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>Detail IMG</div>

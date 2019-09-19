@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b5d21508-1700-434a-a862-faaa0d4f5aaa" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/controller/CreatorController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/controller/CreatorController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/entity/Creator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/entity/Creator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/entity/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/entity/User.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/router/creator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/router/creator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diginalog/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/diginalog/src/pages/Creator/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/diginalog/src/pages/Creator/Register.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -26,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Creator/Register.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="127" column="50" selection-start-line="127" selection-start-column="50" selection-end-line="127" selection-end-column="50" />
+            <state relative-caret-position="-257">
+              <caret line="118" column="26" lean-forward="true" selection-start-line="118" selection-start-column="26" selection-end-line="118" selection-end-column="26" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#88#126#0" expanded="true" />
@@ -209,18 +202,19 @@
       <workItem from="1568724760294" duration="1387000" />
       <workItem from="1568730645777" duration="192000" />
       <workItem from="1568814553636" duration="391000" />
+      <workItem from="1568845566695" duration="276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14421000" />
+    <option name="totallyTimeSpent" value="14697000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.79195803" visible="true" weight="0.1888654" />
-      <window_info id="Structure" order="1" sideWeight="0.20804195" side_tool="true" visible="true" weight="0.1888654" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7902098" visible="true" weight="0.1888654" />
+      <window_info id="Structure" order="1" sideWeight="0.20979021" side_tool="true" visible="true" weight="0.1888654" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -301,8 +295,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/diginalog/src/pages/Creator/Register.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="127" column="50" selection-start-line="127" selection-start-column="50" selection-end-line="127" selection-end-column="50" />
+        <state relative-caret-position="-257">
+          <caret line="118" column="26" lean-forward="true" selection-start-line="118" selection-start-column="26" selection-end-line="118" selection-end-column="26" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#88#126#0" expanded="true" />

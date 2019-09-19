@@ -140,7 +140,7 @@ export class CreatorController {
 
 */
     static registerProduct = async (req, res) => {
-    const {productName, date, price, extension, size, starPoint, file, detailIMG, titleIMG, cid} = req.body;
+    const {productName, date, price, extension, size, starPoint, file, detailIMG, titleIMG, cid, cate_id} = req.body;
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
@@ -148,6 +148,7 @@ export class CreatorController {
         newProduct.P_Price = price;
         newProduct.P_Extension = extension;
         newProduct.P_Size = size;
+        newProduct.State = -1;
         newProduct.P_StarPoint = 0;
         newProduct.P_DetailIMG =  2;
         newProduct.P_TitleIMG = 1;
@@ -158,6 +159,13 @@ export class CreatorController {
             const options = {where:[{cid}],take:1};
             const c = await getConnection().getRepository(Creator).findOne(options);
             newProduct.creator = c;
+            await getConnection().getRepository(Product).save(newProduct);
+        }
+
+        if (cate_id>0) {
+            const options = {where:[{cate_id}],take:1};
+            const c = await getConnection().getRepository(Category).findOne(options);
+            newProduct.category = c;
             await getConnection().getRepository(Product).save(newProduct);
         }
 
