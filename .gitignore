@@ -2,4 +2,6 @@ frontend/**/workspace.xml
 frontend/.idea
 frontend/**/.idea
 .idea
-*/.DS_Store
+**/.DS_Store
+**/node_modules
+
