@@ -30,7 +30,7 @@ export class User{
     U_Name : string;
 
     @Column({
-        length : 10,
+        length : 15,
         nullable:true
     })
     U_Tel : string;
@@ -38,7 +38,10 @@ export class User{
     @Column({nullable:true})
     U_Date : Date;
 
-    @Column({nullable:true})
+    @Column({
+        nullable:true,
+        length : 11
+    })
     U_Birth : string;
 
     @ManyToMany(type => Product , products => products.PID , {

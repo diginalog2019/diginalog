@@ -2,7 +2,8 @@ import {Router} from "express";
 import {UserController} from "../controller/UserController"
 const routes = Router();
 
-routes.get('/products', UserController.getProduct);
-routes.get('/product/:Cate_ID([0-9]+)', UserController.getProduct);
+routes.get('/products', UserController.getAllProduct);
+routes.get('/product/', UserController.getProduct);
+routes.get('/download',UserController.getFileUrl);
 
 export default routes;

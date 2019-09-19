@@ -35,20 +35,22 @@ import {Category} from "../entity/Category";
 import {Creator} from "../entity/Creator";
 import {getConnection} from "typeorm";
 import {Product} from "../entity/Product";
+import {User} from "../entity/User";
+import {Hashtag} from "../entity/Hashtag";
 import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class AdminController {
-    // Shi Ha Yeon : 2019.08.14 Wed----------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.09.01 ----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
         const {start_index, page_size} = req.query;
 
         const options = {};
-       /* options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
+        // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
+        /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
             "P_Size","P_StarPoint","P_DetailIMG",
-            "P_TitleIMG","Cate_ID","CID"];*/
-        options['select'] = ["PID", "P_Name", "P_Price", "P_Extension", "P_StarPoint",
-            "P_TitleIMG"];
+            "P_TitleIMG","categoryCateID", "creatorCID"];*/
+
         options['order'] = {PID: 'DESC'};
         if (start_index) {
             options['skip'] = start_index;
@@ -57,34 +59,60 @@ export class AdminController {
             options['take'] = page_size;
         }
 
-        const products = await getConnection().getRepository(Product).find(options);
+        let products = await getConnection().getRepository(Product).find(options);
 
         const total = await getConnection().getRepository(Product).count();
 
+        const categorys = await getConnection().getRepository(Category).find();
+
+        const creators = await getConnection().getRepository(Creator).find();
+
+        const products2 = products.map(product => {
+            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+            let state = '';
+            switch(product.State){
+                case -1 : state = "미승인";
+                    break;
+                case 0 : state = "심사중";
+                    break;
+                case 1: state="승인";
+                    break;
+            }
+            let date = product.P_Date.toLocaleString();
+            let product2 = {StateName:state,
+                Date:date,
+                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
+                ...product};
+            return product2;
+            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
+        });
+
         const result = new ResultVo(0, "success");
-        result.data = products;
+        result.data = products2;
         result.total = total;
         res.send(result);
     }
-    // Shi Ha Yeon : Fin ---------------------------------------------------------------------
+    // Shi Ha Yeon : 2019.09.01 11:31 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
-        const {PID, P_Name, P_Date, P_Price, P_Extension,
-            P_Size,P_StarPoint,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
+        const {P_Name, P_Price, P_Extension,
+            P_Size,P_DetailIMG, P_TitleIMG, Cate_ID} = req.body;
 
         const newProduct = new Product();
-        newProduct.PID = PID;
+        //newProduct.PID = PID;
         newProduct.P_Name = P_Name;
-        newProduct.P_Date = P_Date;
+        //newProduct.P_Date = P_Date;
         newProduct.P_Price = P_Price;
         newProduct.P_Extension = P_Extension;
         newProduct.P_Size = P_Size;
-        newProduct.P_StarPoint = P_StarPoint;
+        newProduct.P_StarPoint = 0;
         newProduct.P_DetailIMG = P_DetailIMG;
         newProduct.P_TitleIMG = P_TitleIMG ;
 
         if (Cate_ID>0) {
             const options = {where:[{Cate_ID}],take:1};
             const c = await getConnection().getRepository(Category).findOne(options);
+            console.log(c);
             newProduct.category = c;
             await getConnection().getRepository(Product).save(newProduct);
         }
@@ -248,9 +276,69 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
+    // Shi Ha Yeon : 2019.09.15 11:57 ---------------------------------------------------------------
     static removeCreator = async (req, res) => {
         console.log(req);
         const {id} = req.query;
+
+        let products = await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("creatorCID = :id", {id})
+            .execute();
+
+        for(const product of products){
+            // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
+            const titleNum = product.P_TitleIMG;
+            const detailNum = product.P_DetailIMG;
+            const fileNum = product.P_File;
+
+            // s3 upload configuring parameters
+            let params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_TitleIMG/" + id + ".png"
+            };
+            let response, result;
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+
+            params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_DetailIMG/" + id + ".png",
+            };
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+
+            params = {
+                Bucket: 'diginalog-s3',
+                Key: "P_File/" + id + ".pdf",
+            };
+            try {
+                response = await s3.deleteObject(params).promise();
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+                result = new ResultVo(500, 'S3 error');
+                res.send(result);
+            }
+        }
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Product)
+            .where("creatorCID = :id", { id })
+            .execute();
 
         await getConnection()
             .createQueryBuilder()
@@ -262,4 +350,235 @@ export class AdminController {
         const result = new ResultVo(0, 'success');
         res.send(result);
     }
+    //Shi Ha Yeon : 2019.09.16 Fin ---------------------------------------------------------------
+    // Shi Ha Yeon : 2019.09.01 11:18 ----------------------------------------------------------------------
+    static getWaitingProducts = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+        options['order'] = {P_Date: 'ASC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        const state = -1;
+        let products = await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("State = :state", {state})
+            .execute();
+
+        const total = Object.keys(products).length;
+        const categorys = await getConnection().getRepository(Category).find();
+
+        const creators = await getConnection().getRepository(Creator).find();
+
+        const products2 = products.map(product => {
+            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+            let state = '';
+            switch(product.State){
+                case -1 : state = "미승인";
+                    break;
+                case 0 : state = "심사중";
+                    break;
+                case 1: state="승인";
+                    break;
+            }
+            let date = product.P_Date.toLocaleString();
+            let product2 = {StateName:state,
+                Date:date,
+                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
+                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
+                ...product};
+            return product2;
+            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
+        });
+
+        const result = new ResultVo(0, "success");
+        result.data = products2;
+        result.total = total;
+        res.send(result);
+    }
+    static setState = async (req, res) => {
+        const {pid, state} = req.body;
+        const updateOption = {};
+        if (state) updateOption['State'] = state;
+
+        await getConnection().createQueryBuilder().select()
+            .from(Product,"product").where("PID = :pid", {pid})
+            .execute();
+
+        await getConnection().createQueryBuilder().update(Product)
+            .set(updateOption)
+            .where("PID = :pid", { pid })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    static removeProduct = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
+        const options = {relation:["products"], where: [{id}], take: 1};
+        const product = await getConnection().getRepository(Product).findOne(options);
+
+        // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
+        const titleNum = product.P_TitleIMG;
+        const detailNum = product.P_DetailIMG;
+        const fileNum = product.P_File;
+
+        // s3 upload configuring parameters
+        let params = {
+            Bucket: 'diginalog-s3',
+            Key: "P_TitleIMG/" + id + ".png"
+        };
+        let response, result;
+        try {
+            response = await s3.deleteObject(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
+
+        params = {
+            Bucket: 'diginalog-s3',
+            Key: "P_DetailIMG/" + id + ".png",
+        };
+        try {
+            response = await s3.deleteObject(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
+
+        params = {
+            Bucket: 'diginalog-s3',
+            Key: "P_File/" + id + ".pdf",
+        };
+        try {
+            response = await s3.deleteObject(params).promise();
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            result = new ResultVo(500, 'S3 error');
+            res.send(result);
+        }
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(Product)
+            .where("PID = :id", { id })
+            .execute();
+
+        const result2 = new ResultVo(0, 'success');
+        res.send(result2);
+    }
+    static getAllCreators = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {CID: 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let creators = await getConnection().getRepository(Creator).find(options);
+
+        const total = await getConnection().getRepository(Creator).count();
+
+        const result = new ResultVo(0, "success");
+        result.data = creators;
+        result.total = total;
+        res.send(result);
+    }
+    static getProduct = async (req, res) => {
+
+        console.log(req.query);
+        const {id} = req.query;
+
+        console.log("pid = "+id);
+
+        const options = {relation:["category"], where: {PID: id}};
+        let product = await getConnection().getRepository(Product).findOne(options);
+
+        const category = await getConnection().getRepository(Category).findOne({where:{Cate_ID:product.categoryCateID}});
+        const creator = await getConnection().getRepository(Creator).findOne({where:{CID:product.creatorCID}});
+
+        product = {...product,category,creator};
+
+        const result = new ResultVo(0,"success");
+        result.data = product;
+        res.send(result);
+    }
+    static getAllUsers = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {UID : 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let users = await getConnection().getRepository(User).find(options);
+
+        const total = await getConnection().getRepository(User).count();
+
+        const users2 = users.map(user => {
+            let date = user.U_Date.toLocaleString();
+            let user2 = {Date:date, ...user};
+            return user2;
+        });
+
+        const result = new ResultVo(0, "success");
+        result.data = users2;
+        result.total = total;
+        res.send(result);
+    }
+    static removeUser = async (req, res) => {
+        console.log(req);
+        const {id} = req.query;
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(User)
+            .where("UID = :id", { id })
+            .execute();
+
+        const result = new ResultVo(0, 'success');
+        res.send(result);
+    }
+    static getAllHashtags = async (req, res) => {
+        const {start_index, page_size} = req.query;
+        const options = {};
+
+        options['order'] = {HID : 'DESC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
+
+        let hashtags = await getConnection().getRepository(Hashtag).find(options);
+
+        const total = await getConnection().getRepository(Hashtag).count();
+
+        const result = new ResultVo(0, "success");
+        result.data = hashtags;
+        result.total = total;
+        res.send(result);
+    }
+    // Shi Ha Yeon : 2019.09.17 Fin ----------------------------------------------------------------------
 }
