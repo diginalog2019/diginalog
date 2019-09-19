@@ -18,7 +18,6 @@ class CreatorInfo extends Component {
 
   handleClick = (event, id) => {
     console.log("handleClick event");
-    event.preventDefault();
     this.props.history.push(`/creator/SearchCreators/product?id=${id}`);
   };
 
@@ -38,7 +37,8 @@ class CreatorInfo extends Component {
 
   componentWillReceiveProps(newProps) {
     console.log('componentWillReceiveProps', newProps);
-    //this.getCreatorInfo(newProps['creatorCID']);
+    //this.getCreatorInfo(newProps.match.params['creatorCID']);
+    this.getCreatorInfo(newProps['creatorCID']);
   }
   render() {
     return (
