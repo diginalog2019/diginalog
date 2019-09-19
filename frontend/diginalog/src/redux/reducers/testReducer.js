@@ -1,3 +1,4 @@
-const testReducer = () => {
+
+export const testReducer = () => {
   return 'State';
 }

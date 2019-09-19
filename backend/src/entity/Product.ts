@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn,ManyToMany,JoinTable,ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn} from "typeorm";
 import {Hashtag} from "./Hashtag"
 import {User} from "./User"
 import {Creator} from "./Creator"
@@ -14,7 +14,10 @@ export class Product {
     P_Name: string;
 
     @Column({nullable:true})
-    P_Date: Date; //datetime?
+    State: number;
+
+    @Column({nullable:true})
+    P_Date: Date;
 
     @Column({nullable:true})
     P_Price: number;
@@ -34,17 +37,20 @@ export class Product {
     @Column({nullable:true})
     P_StarPoint: number;
 
-    @Column("text")
-    P_DetailIMG: string;
-
-    @Column("text")
-    P_TitleIMG: string;
-
-/*    @Column({nullable:true})
-    Cate_ID: number;
+    @Column({nullable:true})
+    P_DetailIMG: number;
 
     @Column({nullable:true})
-    CID: number;*/
+    P_TitleIMG: number;
+
+    @Column({nullable:true})
+    P_File: number;
+
+    @Column({nullable:true})
+    categoryCateID: number;
+
+    @Column({nullable:true})
+    creatorCID: number;
 
     @ManyToMany(type => Hashtag , hashtags => hashtags.HID , {
         cascade : true

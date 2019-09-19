@@ -8,7 +8,10 @@ import {Hashtag} from "./entity/Hashtag";
 import {Category} from "./entity/Category";
 import {Hash} from "crypto";
 
+import cors from "cors";
+
 const app = express();
+app.use(cors());
 
 createConnection().then(async connection => {
 
