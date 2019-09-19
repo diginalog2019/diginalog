@@ -10,4 +10,5 @@ routes.use('/admin', admin);
 routes.use('/creator', creator);
 /* Kwon Na Hyun : 2019.08.31 fin------------------------------------------*/
 
+
 export default routes;

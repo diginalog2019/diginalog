@@ -1,5 +1,6 @@
 import express from 'express';
 import router from './router';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";

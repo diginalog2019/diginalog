@@ -51,7 +51,7 @@ export class UserController {
         const total = products.length;
         const products2 = products.map(product => {
             let product2 = {CreatorName: creators[(product.creatorCID-1)].C_Nickname,CateName:categorys[(product.categoryCateID-1)].Cate_Name, ...product};
-         // Kim Ju Hui : 2019.08.30 18:24 Fin----------------------------------------------------------------------
+            // Kim Ju Hui : 2019.08.30 18:24 Fin----------------------------------------------------------------------
             return product2;
         });
 

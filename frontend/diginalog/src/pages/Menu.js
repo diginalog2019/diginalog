@@ -38,17 +38,14 @@ class Menu extends Component {
               <NavItem>
                 <NavLink to="/user" className="nav-link">Product</NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink to="/creators" className="nav-link">Creator</NavLink>
-              </NavItem>
-              /* Kwon Na Hyun : 2019.08.31 -------------------------------------------*/
+
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Creator
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    <NavLink to="/Creator/Search" >Search</NavLink>
+                    <NavLink to="/Creator/SearchCreators">Search Creator</NavLink>
                   </DropdownItem>
                   <DropdownItem>
                     <NavLink to="/Creator/Register" >Register</NavLink>
@@ -56,12 +53,13 @@ class Menu extends Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
               /* Kwon Na Hyun : 2019.08.31 fin-------------------------------------------*/
+
               <NavItem>
                 <NavLink to="/admin" className="nav-link">Admin</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Options
+                  Option
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
