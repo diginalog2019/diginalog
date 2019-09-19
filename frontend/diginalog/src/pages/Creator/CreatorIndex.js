@@ -8,7 +8,7 @@ export default class CreatorIndex extends Component {
     return (
       <>
         <Switch>
-          <Route path ="/creator/SearchCreators" component={SearchCreators}></Route>
+          <Route path ="/Creator/SearchCreators" component={SearchCreators}></Route>
         </Switch>
       </>
     )

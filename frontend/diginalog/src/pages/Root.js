@@ -13,7 +13,7 @@ export class Root extends Component {
           <div className="container" style={{backgroundColor: '#ffffff'}}>
             <Switch>
               <Route exact path="/" component={Home}></Route>
-              <Route path = "/creator" component = {CreatorIndex}></Route>
+              <Route path = "/Creator" component = {CreatorIndex}></Route>
             </Switch>
           </div>
 

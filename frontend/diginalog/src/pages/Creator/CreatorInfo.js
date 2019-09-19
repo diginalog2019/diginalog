@@ -18,7 +18,7 @@ class CreatorInfo extends Component {
 
   handleClick = (event, id) => {
     console.log("handleClick event");
-    this.props.history.push(`/creator/SearchCreators/product?id=${id}`);
+    this.props.history.push(`/Creator/SearchCreators/product?id=${id}`);
   };
 
   getCreatorInfo = async (creatorCID) => {
@@ -44,7 +44,7 @@ class CreatorInfo extends Component {
     return (
       <>
         <Switch>
-          <Route path="/creator/SearchCreators/product" component={CreatorInfoDetail}></Route>
+          <Route path="/Creator/SearchCreators/product" component={CreatorInfoDetail}></Route>
         </Switch>
         <div className="card-columns">
           {this.state.filteredProducts.map(product => (
