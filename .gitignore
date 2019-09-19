@@ -1,0 +1,5 @@
+frontend/**/workspace.xml
+frontend/.idea
+./DS_Store
+frontend/**/.idea
+.idea
