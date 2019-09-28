@@ -56,6 +56,7 @@ class Menu extends Component {
               <NavItem>
                 <NavLink to="/admin" className="nav-link">Admin</NavLink>
               </NavItem>
+
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Option
@@ -73,6 +74,11 @@ class Menu extends Component {
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
+
+              <NavItem>
+                <NavLink to="/login" className="nav-link">Sign In</NavLink>
+              </NavItem>
+
             </Nav>
           </Collapse>
         </div>
