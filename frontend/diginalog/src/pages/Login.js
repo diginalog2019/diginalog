@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-
+import "./Login.module.scss";
 class Login extends Component {
   render() {
     return (
       <div>
         Login page
+        <div>
+          <a href="/login/auth/naver">
+            <img src="/images/naverLoginButton.PNG"/>
+          </a>
+        </div>
       </div>
     )
   }
