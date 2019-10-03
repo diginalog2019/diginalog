@@ -73,6 +73,20 @@ class Menu extends Component {
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
+
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Login
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink to="/login/google">Google</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink to="" >Naver</NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </Nav>
           </Collapse>
         </div>

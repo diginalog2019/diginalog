@@ -7,6 +7,7 @@ import Product from "./User/Product/Product";
 import {AdminIndex} from "./Admin/AdminIndex";
 import {Register} from "./Creator/Register";
 import CreatorIndex from "./Creator/CreatorIndex";
+import ggLogin from "./Login/ggLogin";
 
 export class Root extends Component {
   render() {
@@ -24,6 +25,8 @@ export class Root extends Component {
               <Route path="/Creator/Register" component={Register}></Route>
               /* Kwon Na Hyun : 2019.08.31 Fin -------------------------------------------*/
               <Route path = "/Creator" component = {CreatorIndex}></Route>
+              <Route path = "/login/google" component = {ggLogin}></Route>
+              <Route path = "/login/google/success" component = {ggLogin}></Route>
             </Switch>
           </div>
 
