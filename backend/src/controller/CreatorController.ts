@@ -107,13 +107,13 @@ export class CreatorController {
         newProduct.P_Name = productName;
         newProduct.P_Date = date;
         newProduct.P_Price = price;
-        newProduct.P_Extension = extension;
+        //newProduct.P_Extension = extension;
         newProduct.P_Size = size;
         newProduct.State = -1;
         newProduct.P_StarPoint = 0;
-        newProduct.P_DetailIMG =  2;
-        newProduct.P_TitleIMG = 1;
-        newProduct.P_File = 0;
+        //newProduct.P_DetailIMG =  2;
+        //newProduct.P_TitleIMG = 1;
+        //newProduct.P_File = 0;
 
 
         if (cid>0) {
