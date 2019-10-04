@@ -60,5 +60,5 @@ export class Product {
     @OneToMany(type => File, files => files.product, {
         cascade : true
     })
-    files: File[];
+    public files: File[];
 }
