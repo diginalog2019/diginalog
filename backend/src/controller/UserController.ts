@@ -13,7 +13,37 @@ export class UserController {
 
         const {id} = req.query;
 
-        let product = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.PID = :pid", {pid: id}).leftJoinAndSelect("product.creator","creator").leftJoinAndSelect("product.category","category").leftJoinAndSelect("product.files", "file").getOne();
+        let product = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.PID" +
+            " = :pid", {pid: id}).leftJoinAndSelect("product.creator","creator").leftJoinAndSelect("product.category","category").leftJoinAndSelect("product.files", "file").getOne();
+
+        let productDetail = [], productTitle = [], productFile = [];
+
+       await Promise.all(product.files.map(async(file) => {
+
+           let F_Url = await UserController.getUrl(file.F_Name,file.F_Extension,file.F_Type);
+           file['F_Url'] = F_Url;
+
+            switch(file.F_Type) {
+                case 0:
+                    productTitle.push(file);
+                    console.log("push");
+                    break;
+                case 1:
+                    productDetail.push(file);
+                    console.log("push");
+                    break;
+                case 2:
+                    productFile.push(file);
+                    console.log("push");
+
+            }
+        }))
+
+       product['productDetail'] = productDetail;
+       product['productTitle'] = productTitle;
+       product['productFile'] = productFile;
+
+       delete product.files;
 
         const result = new ResultVo(0, "success");
         result.data = product;
@@ -27,6 +57,37 @@ export class UserController {
 
         let products = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.State = :state", {state: 1}).leftJoinAndSelect("product.creator","creator").leftJoinAndSelect("product.category","category").leftJoinAndSelect("product.files", "file").skip(start_index).take(page_size).getMany();
 
+        await Promise.all(products.map(async(product) => {
+            let productDetail = [], productTitle = [], productFile = [];
+
+            await Promise.all(product.files.map(async(file) => {
+
+                let F_Url = await UserController.getUrl(file.F_Name,file.F_Extension,file.F_Type);
+                file['F_Url'] = F_Url;
+
+                switch(file.F_Type) {
+                    case 0:
+                        productTitle.push(file);
+                        console.log("push");
+                        break;
+                    case 1:
+                        productDetail.push(file);
+                        console.log("push");
+                        break;
+                    case 2:
+                        productFile.push(file);
+                        console.log("push");
+
+                }
+            }))
+
+            product['productDetail'] = productDetail;
+            product['productTitle'] = productTitle;
+            product['productFile'] = productFile;
+
+            delete product.files;
+        }))
+
         const total = products.length;
         const result = new ResultVo(0,"success");
         result.data = products;
@@ -39,17 +100,25 @@ export class UserController {
 
         console.log(req.query);
         const {fileName, fileExtension, fileType} = req.query;
-        // Kim Ju Hui : 2019.09.29 Sun ------------------------------------------
+
+        res.send(await UserController.getUrl(fileName,fileExtension,fileType));
+    }
+
+    static getUrl = async(fileName,fileExtension,fileType) => {
+
+        if(typeof(fileType)=="string")
+            fileType = parseInt(fileType);
+
         let folderName = '';
 
         switch (fileType) {
-            case '0':
+            case 0:
                 folderName = 'P_TitleIMG/';
                 break;
-            case '1':
+            case 1:
                 folderName = 'P_DetailIMG/';
                 break;
-            case '2':
+            case 2:
                 folderName = 'P_File/';
         }
 
@@ -58,16 +127,16 @@ export class UserController {
             Key: folderName + fileName + '.' + fileExtension
         }
 
-        s3.headObject(params, function (err, matadata) {
-            if (err && err.code == 'NotFound') {
-                const url = 'error';
-                res.send(url);
-            } else {
-                const url = s3.getSignedUrl('getObject', params);
-                res.send(url);
-            }
-        })
-        // Kim Ju Hui : 2019.09.29 Sun Fin-------------------------------------
+        return new Promise(function(resolve, reject){
+            s3.headObject(params).promise()
+                .then(function (data) {
+                    console.log('s3 File exists' + data);
+                    resolve(s3.getSignedUrl('getObject',params));
+                }).catch(function (err) {
+                console.log('Generating Presigned Link ... Failed' + err);
+                resolve('error');
+            });
+        });
     }
     // Kim Ju Hui : 2019.09.17 Tue Fin-------------------------------------
 }
