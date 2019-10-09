@@ -23,28 +23,19 @@ class UserProducts extends Component {
     getProducts = async () => {
         let response = await api.get(`/api/user/products?start_index=
       ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
-        console.log(response);
+        console.log(response.data.total);
         this.setState({
             products: response.data.data,
             totalCount : response.data.total
         });
-    }
 
-    onError = () => {
-        this.setState({
-            src : process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'
-        });
+        console.log("this state ");
+        console.log(this.state);
     }
 
     componentDidMount() {
         this.getProducts();
     }
-
-    /*onChange = (page) => {
-        this.setState({currentPage: page}, () => {
-            this.getProducts();
-        });
-    }*/
 
     imgError(image) {
         image.onerror = "";
@@ -67,8 +58,13 @@ class UserProducts extends Component {
                         {this.state.products.map(product => (
                             <div className="col-lg-3 col-md-6 col-xs-1 mb-4">
                             <div className="card h-100" key={product.hero_id} onClick={(e) => this.handleClick(e, product.PID)} style={{cursor: 'pointer'}}>
-                                <img onError={this.imgError(this)} src={product.P_TitleIMG ? "https://diginalog-s3.s3.ap-northeast-2.amazonaws.com/P_TitleIMG/"+product.PID+".png" : process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'}
-                                     style={{width: '100%'}} alt={product.name}></img>
+                                {product.productTitle.length == 0 ?
+                                    <img src = {process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'} style={{width: '100%'}} ></img>
+                                    :
+                                    product.productTitle.map(file => (
+                                        <img src = {file.F_Url=='error'? process.env.PUBLIC_URL + '/images/baseline-face-24px.svg':file.F_Url} style={{width: '100%'}}></img>
+                                    ))
+                                }
                                 <div className="card-body">
                                     <h5 className="card-title">{product.P_Name}</h5>
                                     <p className="card-text">작가명: {product.CreatorName}</p>

@@ -17,40 +17,18 @@ class Product extends Component {
         console.log(response);
 
         this.setState({product: response.data.data});
+        console.log("this.state = ");
         console.log(this.state);
     }
-
-    // Kim Ju Hui : 2019.09.16 Mon --------------------------------------------------------
-    viewPhoto() {
-        let cnt = this.state.product.P_DetailIMG;
-
-        if(cnt==1)
-        {
-            return(<img src={"https://diginalog-s3.s3.ap-northeast-2.amazonaws.com/P_DetailIMG/"+this.state.product.PID+".png"}style={{width: '100%'}} alt={this.state.product.P_Name}></img>);
-        }
-        else if(cnt >= 2)
-        {
-            return Array.from(Array(cnt), (e, i) => {
-                console.log({i});
-                console.log("https://diginalog-s3.s3.ap-northeast-2.amazonaws.com/P_DetailIMG/"+this.state.product.PID+"_"+(i+1)+".png");
-                return(<img src={"https://diginalog-s3.s3.ap-northeast-2.amazonaws.com/P_DetailIMG/"+this.state.product.PID+"_"+(i+1)+".png"} style={{width:'100%'}} alt={this.state.product.P_Name}></img>);
-            });
-        }
-        else
-        {
-            return(<p>no detailed image</p>);
-        }
-    }
-    // Kim Ju Hui : 2019.09.16 Mon Fin-------------------------------------------------------------------------
 
     handleClick = async(event) => {
         console.log("handleClick event");
         console.log(event);
 
-        let fileName = this.state.product.PID;
-        let extension = this.state.product.P_Extension;
-        let prefix = 'P_File/';
-        let response = await api.get(`/api/user/download?prefix=${prefix}&fileName=${fileName}&extension=${extension}`);
+        let fileName = this.state.product.productFile.F_Name;
+        let fileExtension = this.state.product.productFile.F_Extension;
+        let fileType = this.state.product.productFile.F_Type;
+        let response = await api.get(`/api/user/download?fileName=${fileName}&fileExtension=${fileExtension}&fileType=${fileType}`);
         window.location.href = response.data;
     }
 
@@ -81,8 +59,13 @@ class Product extends Component {
                     <form>
                         <div className="form-group row">
                             <div className="col-md-6">
-                                <img src={this.state.product.P_TitleIMG ? "https://diginalog-s3.s3.ap-northeast-2.amazonaws.com/P_TitleIMG/"+this.state.product.PID+".png" : process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'}
-                                     style={{width: '100%'}} alt={this.state.product.P_Name}></img>
+                                {this.state.product.productTitle.length == 0 ?
+                                    <img src = {process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'} style={{width: '100%'}} ></img>
+                                    :
+                                    this.state.product.productTitle.map(file => (
+                                        <img src = {file.F_Url=='error'? process.env.PUBLIC_URL + '/images/baseline-face-24px.svg':file.F_Url} style={{width: '100%'}}></img>
+                                    ))
+                                }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="creatorNickname" className="col-sm-2 col-form-label">작가명</label>
@@ -106,7 +89,13 @@ class Product extends Component {
                                     <a class="btn btn-primary" onClick={(e) => this.handleClick(e)} role="button" style={{cursor: 'pointer'}}>download</a>
                                 </div>
                             </div>
-                            {this.viewPhoto()}
+                            {this.state.product.productDetail.length == 0 ?
+                                <img src = {process.env.PUBLIC_URL + '/images/baseline-face-24px.svg'} style={{width: '100%'}} ></img>
+                                :
+                                this.state.product.productDetail.map(file => (
+                                    <img src = {file.F_Url=='error'? process.env.PUBLIC_URL + '/images/baseline-face-24px.svg':file.F_Url} style={{width: '100%'}}></img>
+                                ))
+                            }
                         </div>
 
                     </form>
