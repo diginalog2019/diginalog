@@ -7,24 +7,15 @@ import {NavLink} from "react-router-dom";
 class Product extends Component {
     componentDidMount() {
         let params = queryString.parse(this.props.location.search);
-        console.log(params);
         this.getProduct(params.id);
     }
 
     getProduct = async (id) => {
         let response = await api.get(`/api/user/product?id=${id}`);
-        console.log("id = "+id);
-        console.log(response);
-
         this.setState({product: response.data.data});
-        console.log("this.state = ");
-        console.log(this.state);
     }
 
     handleClick = async(event) => {
-        console.log("handleClick event");
-        console.log(event);
-
         let fileName = this.state.product.productFile.F_Name;
         let fileExtension = this.state.product.productFile.F_Extension;
         let fileType = this.state.product.productFile.F_Type;
@@ -37,7 +28,6 @@ class Product extends Component {
         this.state = {
             product : null
         }
-        console.log(this.props); // match.params: {id: "1"}
     }
 
     render(){

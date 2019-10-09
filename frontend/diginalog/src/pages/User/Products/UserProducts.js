@@ -16,34 +16,23 @@ class UserProducts extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('componentWillReceiveProps:', newProps);
         this.getProducts();
     }
 
     getProducts = async () => {
         let response = await api.get(`/api/user/products?start_index=
       ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
-        console.log(response.data.total);
         this.setState({
             products: response.data.data,
             totalCount : response.data.total
         });
-
-        console.log("this state ");
-        console.log(this.state);
     }
 
     componentDidMount() {
         this.getProducts();
     }
 
-    imgError(image) {
-        image.onerror = "";
-        image.src = "/images/noimage.gif";
-    }
-
     handleClick = (event, id) => {
-        console.log(event, id);
         this.props.history.push(`/user/product?id=${id}`);
     }
 
