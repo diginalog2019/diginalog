@@ -17,7 +17,7 @@ export class User{
     U_ID : string;
 
     @Column({
-        length : 20,
+        length : 50,
         nullable:true
     })
     U_PW : string;

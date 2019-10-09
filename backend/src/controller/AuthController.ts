@@ -2,6 +2,8 @@ import {getConnection} from "typeorm";
 import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+const config = require('../config/config');
 
 export class AuthController {
     static register = async (req, res) => {
@@ -24,9 +26,11 @@ export class AuthController {
     static addUser = async (user) => {
         //const {id, password, email, name, tel, birth};
         const {id, password} = user;
+        const encrypted = crypto.createHmac('sha1', config.secret).update(password).digest('base64');
         const newUser = new User();
         newUser.U_ID = id;
-        newUser.U_PW = password;
+        newUser.U_PW = encrypted;
+        newUser.admin = false;
         // newUser.U_Email = email;
         // newUser.U_Name = name;
         // newUser.U_Tel = tel;
@@ -40,6 +44,7 @@ export class AuthController {
         const secret = req.app.get('jwt-secret');
 
         let user = await getConnection().getRepository(User).findOne({where: {U_ID: id}});
+        const encrypted = crypto.createHmac('sha1', config.secret).update(password).digest('base64');
 
         const response = (token) => {
             res.json({
@@ -50,7 +55,7 @@ export class AuthController {
         if (!user) {
             console.log("login failed. user does not exist");
         } else {
-            if(user.U_PW == password) {
+            if(user.U_PW == encrypted) {
                 // create a promise that generates jwt asynchronously
                 const p = new Promise((resolve, reject) => {
                     jwt.sign({
@@ -71,6 +76,9 @@ export class AuthController {
                 }).then(response);
             } else {
                 console.log("pw not match");
+                res.json({
+                    message: 'pw not match'
+                })
             }
         }
         // console.log 대신 result에 에러메시지를 넘겨주면 좋을듯?
