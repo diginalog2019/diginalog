@@ -43,6 +43,14 @@ import {s3} from "../config/aws";
 export class AdminController {
     // Shi Ha Yeon : 2019.09.01 ----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
+        // Shi Ha Yeon : 2019.10.09 ----------------------------------------------
+        // refuse if not an admin
+        if(!req.decoded.admin) {
+            return res.status(403).json({
+                message: 'you are not an admin'
+            })
+        }
+        // SHi Ha Yeon : 2019.10.09 Fin ------------------------------------------
         const {start_index, page_size} = req.query;
 
         const options = {};

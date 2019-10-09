@@ -55,7 +55,8 @@ export class AuthController {
                 const p = new Promise((resolve, reject) => {
                     jwt.sign({
                         id: user.U_ID,
-                        name: user.U_Name
+                        name: user.U_Name,
+                        admin: user.admin
                         },
                         secret,
                         {

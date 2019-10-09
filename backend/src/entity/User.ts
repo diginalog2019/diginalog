@@ -6,6 +6,11 @@ export class User{
     UID : number;
 
     @Column({
+        nullable:false
+    })
+    admin : boolean;
+
+    @Column({
         length : 20,
         nullable:true
     })
