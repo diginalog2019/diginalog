@@ -6,7 +6,7 @@ class Login extends Component {
       <div>
         Login page
         <div>
-          <a href="/login/auth/naver">
+          <a href="api/login/auth/naver">
             <img src="/images/naverLoginButton.PNG"/>
           </a>
         </div>

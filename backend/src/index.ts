@@ -6,17 +6,6 @@ import {createConnection} from "typeorm";
 import {Hash} from "crypto";
 
 const app = express();
-// Shi Ha Yeon 2019.09.29 -------------------------------------------------------
-
-const passport = require('passport')
-    ,session = require('express-session');
-const passportConfig = require('./config/passport');
-app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false })); // 세션 활성화
-app.use(passport.initialize()); // passport 구동
-app.use(passport.session()); // 세션 연결
-passportConfig(); // 이 부분 추가
-
-// Shi Ha Yeon 2019.09.29 Fin-------------------------------------------------------
 app.use(cors());
 
 createConnection().then(async connection => {
