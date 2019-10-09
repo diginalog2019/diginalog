@@ -4,19 +4,22 @@ import api from '../utils/api';
 import './Creators.module.scss';
 import axios from "axios";
 
+var now = new Date();
+
 export class Register extends Component {
 
     state = {
         cid:'',
         productName: '',
         price: '',
-        date:'',
+        date: now.toLocaleString(),
         extension: '',
         size:'',
         detailIMG:'',
         titleIMG: '',
         file: '',
         cate_id:''
+
 
     }
 
@@ -79,6 +82,15 @@ export class Register extends Component {
             });
     }
 
+    optionSize(value){
+        if(value=="1"){
+            document.getElementById("option").style.display = "block";
+        }
+        else{
+            document.getElementById("option").style.display = "none";
+        }
+    }
+
     submit = (e) => {
         e.preventDefault();
 
@@ -93,7 +105,7 @@ export class Register extends Component {
                     cid:'',
                     productName: '',
                     price: '',
-                    date:'',
+                    date : now.toLocaleString(),
                     extension: '',
                     size:'',
                     detailIMG:'',
@@ -118,22 +130,41 @@ export class Register extends Component {
                                value={this.state.cid} onChange={(e) => this.handleText(e, 'cid')} required />
                     </div>
 
-                    <div className="form-group mt-1">
-                        <label htmlFor="cate_id">Category_ID</label>
-                        <input type="text" className="form-control" placeholder="Enter Category ID" id="cate_id"
-                               value={this.state.cate_id} onChange={(e) => this.handleText(e, 'cate_id')} required />
-                    </div>
-
-                   {/* <div className="form-group mt-1">
+                  {/* <div className="form-group mt-1">
                         <label htmlFor="nickname">Nickname</label>
                         <input type="text" className="form-control" placeholder="Enter Nickname" id="nickname"
                                value={this.state.nickname} onChange={(e) => this.handleText(e, 'nickname')} />
-                    </div>
-*/}
+                    </div>*/}
+
                     <div className="form-group mt-1">
                         <label htmlFor="productName">Product Name</label>
                         <input type="productName" className="form-control" placeholder="Enter Product Name" id="productName"
                                value={this.state.productName} onChange={(e) => this.handleText(e, 'productName')} required />
+                    </div>
+                {/*knh --- onChange함수에 함수 두개 쓸때 아래 방법 맞는지 확인해야함 */}
+
+                    <div className="form-group mt-1">
+                        <label htmlFor="cate_id">Category</label>
+                        <select className="form-control" id="cate_id" value={this.state.cate_id} onChange= optionSize(this.value); {(e)=>this.handleText(e, 'cate_id')}; required>
+                        <option value="0"></option>
+                        <option value="1">속지</option>
+                        <option value="2">마스킹테이프</option>
+                        <option value="3">스티커</option>
+                        <option value="4">기타</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group mt-1" name="option" id="option" style = "style:none">
+                        <label htmlFor="size">Size</label>
+                        <select className="form-control" id="size" value={this.state.size} onChange={(e)=>this.handleText(e, 'size')} >
+                        <option value="0"></option>
+                        <option value="A6">A6</option>
+                        <option value="A5">A5</option>
+                        <option value="A4">A4</option>
+                        <option value="B6">B6</option>
+                        <option value="B5">B5</option>
+                        <option value="B3">B3</option>
+                        </select>
                     </div>
 
                     <div className="form-group mt-1">
@@ -142,11 +173,11 @@ export class Register extends Component {
                                value={this.state.price} onChange={(e) => this.handleText(e, 'price')} required />
                     </div>
 
-                    <div className="form-group mt-1">
+        {/*<div className="form-group mt-1">
                         <label htmlFor="date">Date</label>
                         <input type="date" className="form-control" placeholder="Enter Date (ex. 2020.01.01)" id="date"
                                value={this.state.date} onChange={(e) => this.handleText(e, 'date')} />
-                    </div>
+                    </div>*/}
 
 
                     <div className="form-group mt-1">
@@ -160,12 +191,6 @@ export class Register extends Component {
                             <option value="tiff">TIFF(*.TIF, *.TIFF)</option>
                             <option value="raw">RAW(*.raw)</option>
                         </select>
-                    </div>
-
-                    <div className="form-group mt-1">
-                        <label htmlFor="size">Size</label>
-                        <input type="size" className="form-control" placeholder="Enter Size (ex. 680 * 320)" id="size"
-                               value={this.state.size} onChange={(e) => this.handleText(e, 'size')} />
                     </div>
 
                     <div className="d-flex flex-column mt-3 align-items-start">

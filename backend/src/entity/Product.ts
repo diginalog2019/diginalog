@@ -23,12 +23,6 @@ export class Product {
     P_Price: number;
 
     @Column({
-        length: 10,
-        nullable:true
-    })
-    P_Extension: string;
-
-    @Column({
         length: 20,
         nullable:true
     })
@@ -36,15 +30,6 @@ export class Product {
 
     @Column({nullable:true})
     P_StarPoint: number;
-
-    @Column({nullable:true})
-    P_DetailIMG: number;
-
-    @Column({nullable:true})
-    P_TitleIMG: number;
-
-    @Column({nullable:true})
-    P_File: number;
 
     @Column({nullable:true})
     categoryCateID: number;

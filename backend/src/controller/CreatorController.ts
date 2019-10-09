@@ -15,7 +15,7 @@ export class CreatorController {
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
-            Key: "P_File/" + req.file.originalname,
+            Key: "F_Name/" + req.file.originalname,
             ContentType: req.file.mimetype,
             ACL: 'private'
         };
@@ -45,7 +45,7 @@ export class CreatorController {
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
-            Key: "P_DetailIMG/" + 2,
+            Key: "F_Name/" + req.file.originalname,
             ContentType: req.file.mimetype,
             ACL: 'private'
         };
@@ -79,7 +79,7 @@ export class CreatorController {
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
-            Key: "P_TitleIMG/" + req.file.originalname,
+            Key: "F_Name/" + req.file.originalname,
             ContentType: req.file.mimetype,
             ACL: 'private'
         };
@@ -101,20 +101,15 @@ export class CreatorController {
         res.send(result);
     }
     static registerProduct = async (req, res) => {
-        const {productName, date, price, extension, size, starPoint, file, detailIMG, titleIMG, cid, cate_id} = req.body;
+        const {productName, date, price, extension, size, file, detailIMG, titleIMG, cid, cate_id} = req.body;
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
         newProduct.P_Date = date;
         newProduct.P_Price = price;
-        newProduct.P_Extension = extension;
         newProduct.P_Size = size;
         newProduct.State = -1;
         newProduct.P_StarPoint = 0;
-        newProduct.P_DetailIMG =  2;
-        newProduct.P_TitleIMG = 1;
-        newProduct.P_File = 0;
-
 
         if (cid>0) {
             const options = {where:[{cid}],take:1};
