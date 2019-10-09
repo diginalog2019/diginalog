@@ -1,10 +1,6 @@
 import {getConnection} from "typeorm";
-import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
-import {Category} from "../entity/Category";
 import {Product} from "../entity/Product";
-import {Creator} from "../entity/Creator";
-import {File} from "../entity/File";
 import {s3} from "../config/aws";
 
 export class UserController {
@@ -14,36 +10,32 @@ export class UserController {
         const {id} = req.query;
 
         let product = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.PID" +
-            " = :pid", {pid: id}).leftJoinAndSelect("product.creator","creator").leftJoinAndSelect("product.category","category").leftJoinAndSelect("product.files", "file").getOne();
+            " = :pid", {pid: id}).leftJoinAndSelect("product.creator", "creator").leftJoinAndSelect("product.category", "category").leftJoinAndSelect("product.files", "file").getOne();
 
         let productDetail = [], productTitle = [], productFile = [];
 
-       await Promise.all(product.files.map(async(file) => {
+        await Promise.all(product.files.map(async (file) => {
 
-           let F_Url = await UserController.getUrl(file.F_Name,file.F_Extension,file.F_Type);
-           file['F_Url'] = F_Url;
+            let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
+            file['F_Url'] = F_Url;
 
-            switch(file.F_Type) {
+            switch (file.F_Type) {
                 case 0:
                     productTitle.push(file);
-                    console.log("push");
                     break;
                 case 1:
                     productDetail.push(file);
-                    console.log("push");
                     break;
                 case 2:
-                    productFile.push(file);
-                    console.log("push");
+                    product['productFile'] = file;
 
             }
         }))
 
-       product['productDetail'] = productDetail;
-       product['productTitle'] = productTitle;
-       product['productFile'] = productFile;
+        product['productDetail'] = productDetail;
+        product['productTitle'] = productTitle;
 
-       delete product.files;
+        delete product.files;
 
         const result = new ResultVo(0, "success");
         result.data = product;
@@ -55,41 +47,37 @@ export class UserController {
 
         const {start_index, page_size} = req.query;
 
-        let products = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.State = :state", {state: 1}).leftJoinAndSelect("product.creator","creator").leftJoinAndSelect("product.category","category").leftJoinAndSelect("product.files", "file").skip(start_index).take(page_size).getMany();
+        let products = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.State = :state", {state: 1}).leftJoinAndSelect("product.creator", "creator").leftJoinAndSelect("product.category", "category").leftJoinAndSelect("product.files", "file").skip(start_index).take(page_size).getMany();
 
-        await Promise.all(products.map(async(product) => {
+        await Promise.all(products.map(async (product) => {
             let productDetail = [], productTitle = [], productFile = [];
 
-            await Promise.all(product.files.map(async(file) => {
+            await Promise.all(product.files.map(async (file) => {
 
-                let F_Url = await UserController.getUrl(file.F_Name,file.F_Extension,file.F_Type);
+                let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
                 file['F_Url'] = F_Url;
 
-                switch(file.F_Type) {
+                switch (file.F_Type) {
                     case 0:
                         productTitle.push(file);
-                        console.log("push");
                         break;
                     case 1:
                         productDetail.push(file);
-                        console.log("push");
                         break;
                     case 2:
-                        productFile.push(file);
-                        console.log("push");
+                        product['productFile'] = file;
 
                 }
             }))
 
             product['productDetail'] = productDetail;
             product['productTitle'] = productTitle;
-            product['productFile'] = productFile;
 
             delete product.files;
         }))
 
         const total = products.length;
-        const result = new ResultVo(0,"success");
+        const result = new ResultVo(0, "success");
         result.data = products;
         result.total = total;
         res.send(result);
@@ -101,12 +89,12 @@ export class UserController {
         console.log(req.query);
         const {fileName, fileExtension, fileType} = req.query;
 
-        res.send(await UserController.getUrl(fileName,fileExtension,fileType));
+        res.send(await UserController.getUrl(fileName, fileExtension, fileType));
     }
 
-    static getUrl = async(fileName,fileExtension,fileType) => {
+    static getUrl = async (fileName, fileExtension, fileType) => {
 
-        if(typeof(fileType)=="string")
+        if (typeof (fileType) == "string")
             fileType = parseInt(fileType);
 
         let folderName = '';
@@ -127,13 +115,11 @@ export class UserController {
             Key: folderName + fileName + '.' + fileExtension
         }
 
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             s3.headObject(params).promise()
                 .then(function (data) {
-                    console.log('s3 File exists' + data);
-                    resolve(s3.getSignedUrl('getObject',params));
+                    resolve(s3.getSignedUrl('getObject', params));
                 }).catch(function (err) {
-                console.log('Generating Presigned Link ... Failed' + err);
                 resolve('error');
             });
         });
