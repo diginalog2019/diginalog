@@ -1,8 +1,9 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import {Hashtag} from "./Hashtag"
 import {User} from "./User"
 import {Creator} from "./Creator"
 import {Category} from "./Category";
+import {File} from "./File"
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn()
@@ -23,12 +24,6 @@ export class Product {
     P_Price: number;
 
     @Column({
-        length: 10,
-        nullable:true
-    })
-    P_Extension: string;
-
-    @Column({
         length: 20,
         nullable:true
     })
@@ -36,15 +31,6 @@ export class Product {
 
     @Column({nullable:true})
     P_StarPoint: number;
-
-    @Column({nullable:true})
-    P_DetailIMG: number;
-
-    @Column({nullable:true})
-    P_TitleIMG: number;
-
-    @Column({nullable:true})
-    P_File: number;
 
     @Column({nullable:true})
     categoryCateID: number;
@@ -70,4 +56,9 @@ export class Product {
 
     @ManyToOne(type => Category, category => category.products , {onDelete: 'CASCADE', onUpdate: "CASCADE"})
     category: Category;
+
+    @OneToMany(type => File, files => files.product, {
+        cascade : true
+    })
+    public files: File[];
 }

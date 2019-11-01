@@ -2,11 +2,11 @@ import {Category} from "../entity/Category";
 import {Creator} from "../entity/Creator";
 import {getConnection} from "typeorm";
 import {Product} from "../entity/Product";
+import {File} from "../entity/File";
 import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class CreatorController {
-    /* Kwon Na Hyun : 2019.09.01 && 2019.09.15 ------------------------------------------*/
     static uploadFile = async (req, res) => {
         console.log(req.file);
         //let products = await getConnection().getRepository(Product).find(options);
@@ -101,19 +101,19 @@ export class CreatorController {
         res.send(result);
     }
     static registerProduct = async (req, res) => {
-        const {productName, date, price, extension, size, starPoint, file, detailIMG, titleIMG, cid, cate_id} = req.body;
+        const {productName, date, price, extension, size, file, detailIMG, titleIMG, cid, cate_id} = req.body;
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
         newProduct.P_Date = date;
         newProduct.P_Price = price;
-        newProduct.P_Extension = extension;
+        //newProduct.F_Extension = extension;
         newProduct.P_Size = size;
         newProduct.State = -1;
         newProduct.P_StarPoint = 0;
-        newProduct.P_DetailIMG =  2;
-        newProduct.P_TitleIMG = 1;
-        newProduct.P_File = 0;
+        //newProduct.P_DetailIMG =  2;
+        //newProduct.P_TitleIMG = 1;
+        //newProduct.P_File = 0;
 
 
         if (cid>0) {
@@ -132,7 +132,7 @@ export class CreatorController {
 
         res.send(new ResultVo(0, 'success'));
     }
-    /* Kwon Na Hyun : 2019.09.13 fin------------------------------------------*/
+    /* Kwon Na Hyun fin------------------------------------------*/
     /*jua*/
     static getAllCreators = async (req, res) => {
         const {start_index, page_size} = req.query;

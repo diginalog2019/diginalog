@@ -103,11 +103,11 @@ export class AdminController {
         newProduct.P_Name = P_Name;
         //newProduct.P_Date = P_Date;
         newProduct.P_Price = P_Price;
-        newProduct.P_Extension = P_Extension;
+        //newProduct.P_Extension = P_Extension;
         newProduct.P_Size = P_Size;
         newProduct.P_StarPoint = 0;
-        newProduct.P_DetailIMG = P_DetailIMG;
-        newProduct.P_TitleIMG = P_TitleIMG ;
+        //newProduct.P_DetailIMG = P_DetailIMG;
+        //newProduct.P_TitleIMG = P_TitleIMG ;
 
         if (Cate_ID>0) {
             const options = {where:[{Cate_ID}],take:1};
@@ -423,9 +423,9 @@ export class AdminController {
         const product = await getConnection().getRepository(Product).findOne(options);
 
         // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
-        const titleNum = product.P_TitleIMG;
-        const detailNum = product.P_DetailIMG;
-        const fileNum = product.P_File;
+        //const titleNum = product.P_TitleIMG;
+        //const detailNum = product.P_DetailIMG;
+        //const fileNum = product.P_File;
 
         // s3 upload configuring parameters
         let params = {
