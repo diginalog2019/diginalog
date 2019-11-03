@@ -105,7 +105,7 @@ export class CreatorController {
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
-        newProduct.P_Date = date;
+        newProduct.P_Date = new Date();
         newProduct.P_Price = price;
         //newProduct.F_Extension = extension;
         newProduct.P_Size = size;
