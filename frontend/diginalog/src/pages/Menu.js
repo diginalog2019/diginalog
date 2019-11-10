@@ -76,7 +76,7 @@ class Menu extends Component {
               </UncontrolledDropdown>
 
               <NavItem>
-                <NavLink to="/login" className="nav-link">Sign In</NavLink>
+                <NavLink to="/auth" className="nav-link">Sign In</NavLink>
               </NavItem>
 
             </Nav>

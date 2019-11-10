@@ -24,11 +24,6 @@ createConnection().then(async connection => {
     app.use(morgan('dev'));
     // set the secret key variable for jwt
     app.set('jwt-secret',config.secret);
-    // index page, just for testing
-    app.get('/', (req, res) => {
-        res.send('Hello JWT');
-    })
-
     // Shi Ha Yeon : 2019.10.09 Fin -------------------------------
     app.get('/api/hello', (req, res) => {
         res.send('hello world');
