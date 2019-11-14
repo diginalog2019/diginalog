@@ -2,12 +2,14 @@ import React,{Component} from 'react';
 import api from '../utils/api';
 import {Route, Switch} from "react-router-dom";
 import CreatorInfoDetail from "./CreatorInfoDetail";
+import Pagination from "rc-pagination";
+import 'rc-pagination/dist/rc-pagination.css';
 
 class CreatorInfo extends Component {
   /*---------Jang Jua 2019_09_07------------------------*/
   state = {
-    pageSize:10,
-    totalCount: 0,
+    pageSize: 10,
+    totalCount: 100,
     currentPage: 1,
     filteredProducts:[],
   };
@@ -18,18 +20,29 @@ class CreatorInfo extends Component {
 
   handleClick = (event, id) => {
     console.log("handleClick event");
-    this.props.history.push(`/Creator/SearchCreators/product?id=${id}`);
+    this.props.history.push(`/Creator/product?id=${id}`);
   };
 
   getCreatorInfo = async (creatorCID) => {
     console.log(this.props.creatorCID);
     console.log("creatorCID" + creatorCID);
-    let response = await api.get(`/api/creator/creatorsProduct/${creatorCID}`);
+    let response = await api.get(`/api/creator/creatorsProduct/${creatorCID}?start_index=
+      ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
     console.log(response);
-    this.setState({creatorCID:creatorCID});
-    this.setState({filteredProducts: response.data});
+    this.setState({
+      creatorCID:creatorCID,
+      filteredProducts: response.data,
+      totalCount: response.data.total
+    });
+    console.log("total");
+    console.log(this.state.totalCount);
   };
 
+  onChange = (page) => {
+    this.setState({currentPage: page}, () => {
+      this.getCreatorInfo();
+    });
+  }
   componentDidMount() {
     console.log(this.props);
     this.getCreatorInfo(this.props.creatorCID);
@@ -44,7 +57,7 @@ class CreatorInfo extends Component {
     return (
       <>
         <Switch>
-          <Route path="/Creator/SearchCreators/product" component={CreatorInfoDetail}></Route>
+          <Route path="/Creator/product" component={CreatorInfoDetail}></Route>
         </Switch>
         <div className="card-columns">
           {this.state.filteredProducts.map(product => (
@@ -62,6 +75,8 @@ class CreatorInfo extends Component {
             </div>
           ))}
         </div>
+        <Pagination total={this.state.totalCount} current={this.state.currentPage} pageSize={this.state.pageSize}
+                    onChange={this.onChange} className="d-flex justify-content-center"/>
       </>
     )
   }
