@@ -144,11 +144,12 @@ export class UserController {
 
         let hashtags = await getConnection().getRepository(Hashtag).createQueryBuilder("hashtags")
                             .leftJoinAndSelect("hashtags.products","product")
+                            .andWhere("product.state = :state", {state : 1})
                             .getMany();
 
         await Promise.all(hashtags.map (async (hashtag) => {
             hashtag['total'] = hashtag.products.length;
-            delete hashtag.products;
+            hashtag.products;
         }))
 
         const result = new ResultVo(0,"success");
@@ -156,15 +157,51 @@ export class UserController {
         res.send(result);
     }
 
-    static getProductsByHashtags = async (req, res) => {
-        const {start_index, page_size, hashtags} = req.query;
+    static getProductsByHashtag = async (req, res) => {
+        const {start_index, page_size, hid} = req.query;
 
-        hashtags.sort(function (a, b) {
-            return a.total > b.total ? -1 : a.total < b.total ? 1 : 0;
-        })
+        let hashtagProducts = await getConnection().getRepository(Hashtag).createQueryBuilder("hashtags")
+                                    .where("hashtags.HID = :HID",{HID : hid})
+                                    .leftJoinAndSelect("hashtags.products","product")
+                                    .andWhere("product.state = :state", {state : 1})
+                                    .leftJoinAndSelect("product.creator", "creator")
+                                    .leftJoinAndSelect("product.category", "category")
+                                    .leftJoinAndSelect("product.files", "file")
+                                    .leftJoinAndSelect("product.hashtags","hashtag")
+                                    .skip(start_index).take(page_size)
+                                    .getOne();
 
-        console.log("sorted hashtags");
-        console.log(hashtags);
-        let products = await getConnection().getRepository(Hashtag).createQueryBuilder('products')
+        await Promise.all(hashtagProducts.products.map(async (product) => {
+            let productDetail = [], productTitle = [], productFile = [];
+
+            await Promise.all(product.files.map(async (file) => {
+
+                let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
+                file['F_Url'] = F_Url;
+
+                switch (file.F_Type) {
+                    case 0:
+                        productTitle.push(file);
+                        break;
+                    case 1:
+                        productDetail.push(file);
+                        break;
+                    case 2:
+                        product['productFile'] = file;
+
+                }
+            }))
+
+            product['productDetail'] = productDetail;
+            product['productTitle'] = productTitle;
+
+            delete product.files;
+        }))
+
+       const total = hashtagProducts.products.length;
+        const result = new ResultVo(0,"success");
+        result.data = hashtagProducts;
+        result.total = total;
+        res.send(result);
     }
 }

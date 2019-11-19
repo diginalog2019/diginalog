@@ -6,22 +6,9 @@ import {Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import Product from '../Product/Product';
 import './UserProducts.module.scss';
-import Hashtags from './Hashtags';
-import ProductCards from './ProductCard';
-import {getProducts, getHashtags} from "../../../redux/actions";
-import {productsReducer} from "../../../redux/reducers/products";
 import Products from "./Products";
 
 class ViewProducts extends Component {
-    // state = {
-    //     pageSize:10,
-    //     totalCount: 0,
-    //     currentPage: 1,
-    //     params: "",
-    //     products: [],
-    //     hashtags: [],
-    //     checkedHashtags: []
-    // }
 
     componentWillReceiveProps(newProps) {
     }
@@ -36,7 +23,6 @@ class ViewProducts extends Component {
                 <Switch>
                     <Route path="/user/product" component={Product}></Route>
                 </Switch>
-                <Hashtags/>
                 <div className="container mt-4">
                 <div className="row">
                    <Products history = {this.props.history}  />

@@ -76,7 +76,7 @@ class Product extends Component {
                                 </div>
                                 <label htmlFor="inputEmail" className="col-sm-2 col-form-label"></label>
                                 <div className="col-sm-10">
-                                    <a class="btn btn-primary" onClick={(e) => this.handleClick(e)} role="button" style={{cursor: 'pointer'}}>download</a>
+                                    <a className="btn btn-primary" onClick={(e) => this.handleClick(e)} role="button" style={{cursor: 'pointer'}}>download</a>
                                 </div>
                             </div>
                             {this.state.product.productDetail.length == 0 ?

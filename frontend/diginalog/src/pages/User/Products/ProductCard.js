@@ -34,7 +34,15 @@ class ProductCard extends Component {
                             <p className="card-text">별점: {this.props.P_StarPoint}</p>
                         </div>
                         <div className="card-footer">
-                            <small className="text-muted">#hashtag #example</small>
+
+                                {this.props.hashtags.length == 0 ?
+                                    <small className="text-muted"> no hashtags </small>
+                                    :
+                                    this.props.hashtags.map(hashtag => (
+                                        <button key = {hashtag.HID} >{hashtag.H_Name}</button>
+                                    ))
+                                }
+
                         </div>
                     </div></div>
             </>
