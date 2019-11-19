@@ -32,12 +32,12 @@ class Menu extends Component {
     return (
       <Navbar color="white" light expand="md">
         <div className="container-fluid">
-        <Nav navbar ml-md-5>
+        <Nav navbar>
           <a className="navbar-brand" href="/" >
             <img src={process.env.PUBLIC_URL + '/images/mainLogo.png'} width="200" height="70" alt=""></img>
           </a>
         </Nav>
-        <NavbarToggler onClick={this.toggle} ml-5/>
+        <NavbarToggler onClick={this.toggle}/>
         <Collapse isOpen={this.state.isOpen} navbar>
           <ul className="navbar-nav mr-auto">
             <NavItem>
@@ -79,8 +79,8 @@ class Menu extends Component {
           </ul>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
           <div className="col-md-6 mb-1">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Enter your search term" aria-label="Search term"
+            <div className="input-group">
+              <input type="text" className="form-control" placeholder="Enter your search term" aria-label="Search term"
                      aria-describedby="basic-addon"></input>
               <div className="input-group-append">
                 <button className="btn btn-outline-white" type="button">

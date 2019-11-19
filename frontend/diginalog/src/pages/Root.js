@@ -12,18 +12,15 @@ export class Root extends Component {
       <BrowserRouter>
         <>
           <Menu/>
-          <div class="bg" style={{backgroundColor: '#ffffff'}}>
+          <div className="bg" style={{backgroundColor: '#ffffff'}}>
             <Switch>
               <Route exact path="/" component={Home}></Route>
-              <div class="ml-4 mr-4">
-                <Route path="/user" component={UserIndex}></Route>
-                <Route path="/user/product" component={UserIndex}></Route>
-                <Route path="/admin" component={AdminIndex}></Route>
-                <Route path = "/Creator" component = {CreatorIndex}></Route>
-              </div>
+              <Route path="/user" component={UserIndex}></Route>
+              <Route path="/user/product" component={UserIndex}></Route>
+              <Route path="/admin" component={AdminIndex}></Route>
+              <Route path = "/Creator" component = {CreatorIndex}></Route>
             </Switch>
           </div>
-
         </>
       </BrowserRouter>
     )

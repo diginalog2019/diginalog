@@ -56,7 +56,7 @@ class SearchCreators extends Component {
     let find = this.state.creators.findIndex(creator => (
       creator.C_ID === this.state.keyword
     ));
-    console.log(find);
+    //console.log(find);
     this.setState({index:find});
   };
   handleText = (e, key) => {
@@ -68,7 +68,7 @@ class SearchCreators extends Component {
 
   render() {
     return (
-      <div class="ml-3">
+      <div className="ml-4 mr-4">
         <div className = "col-md-8">
           <form onSubmit={this.search}>
             <div className="input-group mb-3">
@@ -85,8 +85,6 @@ class SearchCreators extends Component {
             : "일치하는 ID가 없습니다."
             : " "
         }
-        <Pagination total={this.state.totalCount} current={this.state.currentPage} pageSize={this.state.pageSize}
-                    onChange={this.onChange} className="d-flex justify-content-center"/>
       </div>
     )
   }
