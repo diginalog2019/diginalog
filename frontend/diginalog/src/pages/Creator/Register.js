@@ -10,8 +10,6 @@ export class Register extends Component {
         cid:'',
         productName: '',
         price: '',
-        //date:'',
-        extension: '',
         size:'',
         detailIMG:'',
         titleIMG: '',
@@ -28,9 +26,9 @@ export class Register extends Component {
         console.log(_fileExt);
         this.setState(extension: _fileExt);
     }*/
-    get_extension(filename) { // 오류 계속고쳤지만 남. 빡친다 안해 후우.. 그 다운받을때? 받아오면 안됨? 굳이 디비에 저장해야하냐....ㅠㅜㅠ
+   /* get_extension(filename) {
         return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
-    }
+    }*/
 
     handleText = (e, key) => {
         this.setState({[key]: e.target.value});
@@ -53,7 +51,6 @@ export class Register extends Component {
                 console.log(response.data);
                 this.setState({file: response.data.data});
             });
-        this.setState({extension: this.get_extension(e)})
     }
 
     handleUploadDetailIMG = (e) => {
@@ -71,7 +68,7 @@ export class Register extends Component {
         api.post('/api/creator/detailIMG', formData)
             .then(response => {
                 console.log(response.data);
-                this.setState({file: response.data.data});
+                this.setState({detailIMG: response.data.data});
             });
     }
 
@@ -90,7 +87,7 @@ export class Register extends Component {
         api.post('/api/creator/titleIMG', formData)
             .then(response => {
                 console.log(response.data);
-                this.setState({file: response.data.data});
+                this.setState({titleIMG: response.data.data});
             });
     }
 
@@ -108,8 +105,6 @@ export class Register extends Component {
                     cid:'',
                     productName: '',
                     price: '',
-                    //date:'',
-                    extension:'',
                     detailIMG:'',
                     titleIMG: '',
                     size:'',
@@ -136,7 +131,7 @@ export class Register extends Component {
                     <div className="form-group mt-1">
                         <label htmlFor="cate_id">Category_ID</label>
                         <select className="form-control" id="cate_id" value={this.state.cate_id} onChange={(e)=>this.handleText(e, 'cate_id')} required>
-                            <option value="100"></option>
+                            <option value="0"></option>
                             <option value="1">다이어리 속지</option>
                             <option value="2">떡메모지</option>
                             <option value="3">스티커</option>
@@ -145,9 +140,9 @@ export class Register extends Component {
                     </div>
 
                     <div className="form-group mt-1">
-                        <label htmlFor="size">Size (카테고리가 다이어리 속지인 경우만!!)</label>
+                        <label htmlFor="size">Size</label>
                         <select className="form-control" id="size" value={this.state.size} onChange={(e)=>this.handleText(e, 'size')} >
-                            <option value="NO">카테고리가 다이어리 속지가 아닌 경우</option>
+                            <option value="NO">카테고리가 다이어리 속지가 아닌 경우는 건드리지마시오</option>
                             <option value="B5">B5</option>
                             <option value="B4">B4</option>
                             <option value="B3">B3</option>
@@ -190,16 +185,18 @@ export class Register extends Component {
                         </select>
                     </div>
 */}
-                    (아래 모든 항목에서 여러장 업로드시 zip 파일로 업로드 / pdf, png 파일만 업로드 가능)
+                    (아래 항목에서 여러장 업로드시 zip 파일로 업로드 / pdf, png 파일만 업로드 가능)
+                    개발자친화 환경에서 개발된 사이트 입니다. 한장씩만 업로드 가능하며 무조건 png 파일만 업로드 가능하시오.
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>File</div>
                         <div className="custom-file">
                             <input type="file" className="custom-file-input" id="file"  onChange={this.handleUploadFile}/>
                             <label className="custom-file-label" htmlFor="file">Choose File</label>
                         </div>
-                        {
+                        {/*{
                             this.state.file ? <img src={this.state.file} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.file)}
                     </div>
 
                     <div className="d-flex flex-column mt-3 align-items-start">
@@ -208,9 +205,10 @@ export class Register extends Component {
                             <input type="file" className="custom-file-input" id="detailIMG" onChange={this.handleUploadDetailIMG} />
                             <label className="custom-file-label" htmlFor="detailIMG">Choose Detail IMG</label>
                         </div>
-                        {
+                        {/*{
                             this.state.detailIMG ? <img src={this.state.detailIMG} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.detailIMG)}
                     </div>
 
                     <div className="d-flex flex-column mt-3 align-items-start">
@@ -219,9 +217,10 @@ export class Register extends Component {
                             <input type="file" className="custom-file-input" id="titleIMG" onChange={this.handleUploadTitleIMG}  />
                             <label className="custom-file-label" htmlFor="titleIMG">Choose Title IMG</label>
                         </div>
-                        {
+                        {/*{
                             this.state.titleIMG ? <img src={this.state.titleIMG} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.titleIMG)}
                     </div>
 
                     <div className="m-3 d-flex justify-content-center">

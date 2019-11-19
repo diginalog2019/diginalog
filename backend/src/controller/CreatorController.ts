@@ -45,7 +45,7 @@ export class CreatorController {
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
-            Key: "P_DetailIMG/" + 2,
+            Key: "P_DetailIMG/" + req.file.originalname,
             ContentType: req.file.mimetype,
             ACL: 'private'
         };
@@ -69,17 +69,11 @@ export class CreatorController {
     static uploadTitleIMG = async (req, res) => {
         console.log(req.file);
         let products = await getConnection().getRepository(Product);
-        //let total = SELECT COUNT(*) FROM products;
 
-        //const options = {where:[{cid}],take:1};
-        //const c = await getConnection().getRepository(Creator).findOne(options);
-
-        //products[count(*)-1].PID
-        // s3 upload configuring parameters
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
-            Key: "P_TitleIMG/" + req.file.originalname,
+            Key: "P_TitleIMG/" + req.file.originalname ,
             ContentType: req.file.mimetype,
             ACL: 'private'
         };
@@ -101,20 +95,17 @@ export class CreatorController {
         res.send(result);
     }
     static registerProduct = async (req, res) => {
-        const {productName, date, price, extension, size, file, detailIMG, titleIMG, cid, cate_id} = req.body;
+        const {productName, date, price, extension, size, files, detailIMG, titleIMG, cid, cate_id} = req.body;
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
         newProduct.P_Date = new Date();
         newProduct.P_Price = price;
-        //newProduct.F_Extension = extension;
         newProduct.P_Size = size;
         newProduct.State = -1;
         newProduct.P_StarPoint = 0;
-        //newProduct.P_DetailIMG =  2;
-        //newProduct.P_TitleIMG = 1;
-        //newProduct.P_File = 0;
 
+        await getConnection().getRepository(Product).save(newProduct);
 
         if (cid>0) {
             const options = {where:[{cid}],take:1};
@@ -129,9 +120,24 @@ export class CreatorController {
             newProduct.category = c;
             await getConnection().getRepository(Product).save(newProduct);
         }
+        if (files && files.length > 0) {
+            const newFiles = files.map(file => {
+                const f = new File();
+                //f.F_Extension = req.file.originalname.slice((req.file.originalname.lastIndexOf('.')-1 >>> 0));
+                f.F_Extension = "png";
+                f.F_Name = req.file.originalname;
+                //f.F_Type = 타입을 따로 저장하지 않고 이름 마지막에 숫자로 표시되면 안되나? 0,1,2
+                f.product = newProduct;
+                return f;
+            })
+            // bulk insert
+            await getConnection().createQueryBuilder().insert().into(File).values(newFiles).execute();
+        }
 
         res.send(new ResultVo(0, 'success'));
     }
+
+
     /* Kwon Na Hyun fin------------------------------------------*/
     /*jua*/
     static getAllCreators = async (req, res) => {
