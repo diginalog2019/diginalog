@@ -423,6 +423,7 @@ export class AdminController {
         const product = await getConnection().getRepository(Product).findOne(options);
 
         // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
+
         //const titleNum = product.P_TitleIMG;
         //const detailNum = product.P_DetailIMG;
         //const fileNum = product.P_File;
