@@ -1,4 +1,4 @@
-import {LOGIN_USER, SEARCH_CREATOR, LOGOUT_USER,SEARCH_CREATOR, UPDATE_CHECKED_HASHTAGS} from "./actionTypes";
+import {LOGIN_USER, SEARCH_CREATOR, LOGOUT_USER, UPDATE_CHECKED_HASHTAGS} from "./actionTypes";
 import api from "../pages/utils/api";
 
 export const searchCreator = (C_NICKNAME) => {
