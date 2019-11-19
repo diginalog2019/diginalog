@@ -10,6 +10,8 @@ import {
   NavItem,
   UncontrolledDropdown
 } from "reactstrap";
+import {connect} from "react-redux";
+import {getProfileFetch, logoutUser, userLoginFetch} from "../redux/actions";
 
 class Menu extends Component {
   constructor(props) {
@@ -25,6 +27,14 @@ class Menu extends Component {
     this.setState({
       isOpen: !this.state.isOpen
     });
+  }
+
+  handleClick = event => {
+    event.preventDefault()
+    // Remove the token from localStorage
+    localStorage.removeItem("token")
+    // Remove the user object from the Redux store
+    this.props.logoutUser()
   }
 
   render() {
@@ -75,9 +85,17 @@ class Menu extends Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
 
-              <NavItem>
-                <NavLink to="/auth" className="nav-link">Sign In</NavLink>
-              </NavItem>
+              {this.props.currentUser.id
+                  ?
+                  <div>
+                    Hello, {this.props.currentUser.id}!
+                    <button onClick={this.handleClick} className="btn btn-outline-primary">Log Out</button>
+                  </div>
+                  :
+                  <NavItem>
+                    <NavLink to="/auth" className="nav-link">Sign In</NavLink>
+                  </NavItem>
+              }
 
             </Nav>
           </Collapse>
@@ -86,5 +104,15 @@ class Menu extends Component {
     )
   }
 }
+let mapStateToProps = (state) => {
+  return {
+    currentUser : state.authReducer.currentUser
+  }
+}
+const mapDispatchToProps = dispatch => ({
+  userLoginFetch: userInfo => dispatch(userLoginFetch(userInfo)),
+  getProfileFetch: () => dispatch(getProfileFetch()),
+  logoutUser: () => dispatch(logoutUser())
+})
 
-export default Menu;
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

@@ -17,10 +17,8 @@ class Login extends Component {
         //nextProps.getProfileFetch();
     }
 
-    handleChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
+    handleChange = (e,key) => {
+        this.setState({[key]: e.target.value});
     }
 
     handleSubmit = event => {
@@ -39,31 +37,21 @@ class Login extends Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <h1>Login</h1>
+                <h3>Sign In</h3>
 
-                <label>ID</label>
-                <input
-                    name='id'
-                    placeholder='ID'
-                    value={this.state.id}
-                    onChange={this.handleChange}
-                /><br/>
+                <div className="form-group">
+                    <label>ID</label>
+                    <input type="text" className="form-control" placeholder="Enter ID" value={this.state.id}
+                           onChange={(e) => this.handleChange(e, 'id')} required  />
+                </div>
 
-                <label>Password</label>
-                <input
-                    type='password'
-                    name='password'
-                    placeholder='Password'
-                    value={this.state.password}
-                    onChange={this.handleChange}
-                /><br/>
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" className="form-control" placeholder="Enter password" value={this.state.password}
+                           onChange={(e) => this.handleChange(e, 'password')} required/>
+                </div>
 
-                <input type='submit'/>
-
-                {this.props.currentUser.id
-                    ? <button onClick={this.handleClick}>Log Out</button>
-                    : null
-                }
+                <button type="submit" className="btn btn-primary btn-block">Sign In</button>
 
             </form>
         )

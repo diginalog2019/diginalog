@@ -21,7 +21,7 @@ export const userPostFetch = user => {
           } else {
               console.log("register success");
             //localStorage.setItem("token", resp.data.data.jwt)
-            dispatch(loginUser(resp.data.data.user))
+            //dispatch(loginUser(resp.data.data.user))
           }
         })
   }

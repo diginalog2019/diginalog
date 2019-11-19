@@ -19,7 +19,6 @@ export class AuthController {
             // 프론트에 어떻게 알려줘야 할까?
             data.message = "exist user id";
         } else {
-            //{id, password, email, name, tel, birth} 다 받아야함
             const encrypted = crypto.createHmac('sha1', config.secret).update(password).digest('base64');
             const newUser = new User();
             newUser.U_ID = id;
@@ -88,9 +87,10 @@ export class AuthController {
                     jwt.sign(
                         //payload
                         {
-                        id: user.U_ID,
-                        name: user.U_Name,
-                        admin: user.admin
+                            UID: user.UID,
+                            id: user.U_ID,
+                            name: user.U_Name,
+                            admin: user.admin
                         },
                         secret,
                         {
