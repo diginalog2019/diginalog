@@ -43,55 +43,72 @@ import {s3} from "../config/aws";
 export class AdminController {
     // Shi Ha Yeon : 2019.09.01 ----------------------------------------------------------------------
     static getAllProducts = async (req, res) => {
-        const {start_index, page_size} = req.query;
-
-        const options = {};
-        // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
-        /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
-            "P_Size","P_StarPoint","P_DetailIMG",
-            "P_TitleIMG","categoryCateID", "creatorCID"];*/
-
-        options['order'] = {PID: 'DESC'};
-        if (start_index) {
-            options['skip'] = start_index;
+        // Shi Ha Yeon : 2019.10.09 ----------------------------------------------
+        // refuse if not an admin
+        //console.log(req);
+        if(!req.decoded.admin) {
+            /*return res.status(403).json({
+                message: 'you are not an admin'
+            })*/
+            return res.send({message: 'you are not an admin', data:[],total:{}});
         }
-        if (page_size) {
-            options['take'] = page_size;
-        }
+        else {
+            // SHi Ha Yeon : 2019.10.09 Fin ------------------------------------------
+            const {start_index, page_size} = req.query;
 
-        let products = await getConnection().getRepository(Product).find(options);
+            const options = {};
+            // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
+            /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
+                "P_Size","P_StarPoint","P_DetailIMG",
+                "P_TitleIMG","categoryCateID", "creatorCID"];*/
 
-        const total = await getConnection().getRepository(Product).count();
-
-        const categorys = await getConnection().getRepository(Category).find();
-
-        const creators = await getConnection().getRepository(Creator).find();
-
-        const products2 = products.map(product => {
-            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
-            let state = '';
-            switch(product.State){
-                case -1 : state = "미승인";
-                    break;
-                case 0 : state = "심사중";
-                    break;
-                case 1: state="승인";
-                    break;
+            options['order'] = {PID: 'DESC'};
+            if (start_index) {
+                options['skip'] = start_index;
             }
-            let date = product.P_Date.toLocaleString();
-            let product2 = {StateName:state,
-                Date:date,
-                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
-                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
-                ...product};
-            return product2;
-            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
-        });
+            if (page_size) {
+                options['take'] = page_size;
+            }
 
-        const result = new ResultVo(0, "success");
-        result.data = products2;
-        result.total = total;
-        res.send(result);
+            let products = await getConnection().getRepository(Product).find(options);
+
+            const total = await getConnection().getRepository(Product).count();
+
+            const categorys = await getConnection().getRepository(Category).find();
+
+            const creators = await getConnection().getRepository(Creator).find();
+
+            const products2 = products.map(product => {
+                // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+                let state = '';
+                switch (product.State) {
+                    case -1 :
+                        state = "미승인";
+                        break;
+                    case 0 :
+                        state = "심사중";
+                        break;
+                    case 1:
+                        state = "승인";
+                        break;
+                }
+                let date = product.P_Date.toLocaleString();
+                let product2 = {
+                    StateName: state,
+                    Date: date,
+                    CreatorName: creators[(product.creatorCID - 1)].C_Nickname,
+                    CateName: categorys[(product.categoryCateID - 1)].Cate_Name,
+                    ...product
+                };
+                return product2;
+                // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
+            });
+
+            const result = new ResultVo(0, "success");
+            result.data = products2;
+            result.total = total;
+            res.send(result);
+        }
     }
     // Shi Ha Yeon : 2019.09.01 11:31 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {
@@ -423,9 +440,9 @@ export class AdminController {
         const product = await getConnection().getRepository(Product).findOne(options);
 
         // 삭제할 파일 개수 : 나중에 반복문으로 여러개의 파일 삭제 처리해야함
-        // const titleNum = product.P_TitleIMG;
-        // const detailNum = product.P_DetailIMG;
-        // const fileNum = product.P_File;
+        //const titleNum = product.P_TitleIMG;
+        //const detailNum = product.P_DetailIMG;
+        //const fileNum = product.P_File;
 
         // s3 upload configuring parameters
         let params = {
