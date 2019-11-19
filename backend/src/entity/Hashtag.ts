@@ -13,5 +13,8 @@ export class Hashtag {
     @ManyToMany(type => Product , products => products.PID ,  {
         cascade : true
     })
+    @JoinTable({
+        name: 'ProductHashtag'
+    })
     products : Product[];
 }

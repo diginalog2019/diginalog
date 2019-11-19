@@ -2,6 +2,8 @@ import {getConnection} from "typeorm";
 import {ResultVo} from "../vo/ResultVo";
 import {Product} from "../entity/Product";
 import {s3} from "../config/aws";
+import {Hashtag} from "../entity/Hashtag";
+import {Hash} from "crypto";
 
 export class UserController {
     // Kim Ju Hui : 2019.09.13 Sat--------------------------------------------
@@ -9,8 +11,13 @@ export class UserController {
 
         const {id} = req.query;
 
-        let product = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.PID" +
-            " = :pid", {pid: id}).leftJoinAndSelect("product.creator", "creator").leftJoinAndSelect("product.category", "category").leftJoinAndSelect("product.files", "file").getOne();
+        let product = await getConnection().getRepository(Product).createQueryBuilder("product")
+                            .where("product.PID" + " = :pid", {pid: id})
+                            .leftJoinAndSelect("product.creator", "creator")
+                            .leftJoinAndSelect("product.category", "category")
+                            .leftJoinAndSelect("product.files", "file")
+                            .leftJoinAndSelect("product.hashtags","hashtag")
+                            .getOne();
 
         let productDetail = [], productTitle = [], productFile = [];
 
@@ -47,7 +54,14 @@ export class UserController {
 
         const {start_index, page_size} = req.query;
 
-        let products = await getConnection().getRepository(Product).createQueryBuilder("product").where("product.State = :state", {state: 1}).leftJoinAndSelect("product.creator", "creator").leftJoinAndSelect("product.category", "category").leftJoinAndSelect("product.files", "file").skip(start_index).take(page_size).getMany();
+        let products = await getConnection().getRepository(Product).createQueryBuilder("product")
+                            .where("product.State = :state", {state: 1})
+                            .leftJoinAndSelect("product.creator", "creator")
+                            .leftJoinAndSelect("product.category", "category")
+                            .leftJoinAndSelect("product.files", "file")
+                            .leftJoinAndSelect("product.hashtags","hashtag")
+                            .skip(start_index).take(page_size)
+                            .getMany();
 
         await Promise.all(products.map(async (product) => {
             let productDetail = [], productTitle = [], productFile = [];
@@ -125,4 +139,32 @@ export class UserController {
         });
     }
     // Kim Ju Hui : 2019.09.17 Tue Fin-------------------------------------
+
+    static getAllHashtag = async (req, res) => {
+
+        let hashtags = await getConnection().getRepository(Hashtag).createQueryBuilder("hashtags")
+                            .leftJoinAndSelect("hashtags.products","product")
+                            .getMany();
+
+        await Promise.all(hashtags.map (async (hashtag) => {
+            hashtag['total'] = hashtag.products.length;
+            delete hashtag.products;
+        }))
+
+        const result = new ResultVo(0,"success");
+        result.data = hashtags;
+        res.send(result);
+    }
+
+    static getProductsByHashtags = async (req, res) => {
+        const {start_index, page_size, hashtags} = req.query;
+
+        hashtags.sort(function (a, b) {
+            return a.total > b.total ? -1 : a.total < b.total ? 1 : 0;
+        })
+
+        console.log("sorted hashtags");
+        console.log(hashtags);
+        let products = await getConnection().getRepository(Hashtag).createQueryBuilder('products')
+    }
 }

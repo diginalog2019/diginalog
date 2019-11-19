@@ -5,7 +5,7 @@ import './UserIndex.scss';
 import {
     Nav,
     NavItem} from 'reactstrap';
-import UserProducts from './Products/UserProducts';
+import UserProducts from './Products/ViewProducts';
 import Test from './Products/test';
 import Product from "./Product/Product";
 

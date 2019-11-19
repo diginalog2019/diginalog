@@ -1,2 +1,3 @@
 export const REFRESH_LIST = 'admin/REFRESH_LIST';
 export const SEARCH_CREATOR = 'creator/SEARCH_CREATOR';
+export const UPDATE_CHECKED_HASHTAGS = 'products/UPDATE_CHECKED_HASHTAGS'
