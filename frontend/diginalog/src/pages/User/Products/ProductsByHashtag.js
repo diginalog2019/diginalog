@@ -38,7 +38,6 @@ class ProductsByHashtag extends Component {
     componentDidMount() {
         let params = queryString.parse(this.props.location.search);
         this.getProducts(params.hid);
-        console.log(this.state);
     }
 
     render() {

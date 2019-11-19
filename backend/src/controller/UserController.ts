@@ -198,7 +198,7 @@ export class UserController {
             delete product.files;
         }))
 
-       const total = hashtagProducts.products.length;
+        const total = hashtagProducts.products.length;
         const result = new ResultVo(0,"success");
         result.data = hashtagProducts;
         result.total = total;
