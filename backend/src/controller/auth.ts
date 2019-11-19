@@ -24,6 +24,7 @@ const authMiddleware = (req, res, next) => {
 
     // if it has failed to verify, it will return an error message
     const onError = (error) => {
+        console.log(error);
         res.status(403).json({
             success: false,
             message: error.message
@@ -32,7 +33,7 @@ const authMiddleware = (req, res, next) => {
 
     // process the promise
     p.then((decoded)=>{
-        req.decoded = decoded
+        req.decoded = decoded;
         next()
     }).catch(onError)
 }

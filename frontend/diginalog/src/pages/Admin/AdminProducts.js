@@ -9,16 +9,18 @@ import {Route, Switch} from "react-router-dom";
 // import Hero from "../hero/Hero";
 import {connect} from "react-redux";
 import AdminProduct from "./AdminProduct";
+import {getProfileFetch} from '../../redux/actions';
 class AdminProducts extends Component {
   state = {
     pageSize: 10,
     totalCount: 100,
     currentPage: 1,
     products: [],
-    deleteProduct:0
+    deleteProduct:0,
   }
 
   componentDidMount() {
+    //this.props.getProfileFetch();
     this.getProducts();
   }
 
@@ -26,16 +28,23 @@ class AdminProducts extends Component {
     console.log('componentWillReceiveProps:', newProps);
     this.getProducts();
   }
+/*  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    if()
+    this.getProducts();
+    return nextProps.currentuser !== this.props.currentUser;
+  }*/
 
   getProducts = async () => {
+    let token = localStorage.token;
+    //console.log(token);
     let response = await api.get(`/api/admin/products?start_index=
-      ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
-    //console.log(response);
+      ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}&token=${token}`);
+    console.log(response);
     this.setState({
       products: response.data.data,
       totalCount: response.data.total
     });
-    //console.log(this.state);
+    console.log(this.state);
   }
 
   onChange = (page) => {
@@ -130,7 +139,12 @@ class AdminProducts extends Component {
 let mapStateToProps = (state) => {
   return {
     //refresh_count: state.heroReducer.refresh_count
+    currentUser : state.authReducer.currentUser
   }
 }
+const mapDispatchToProps = dispatch => ({
+  getProfileFetch: () => dispatch(getProfileFetch())
+})
 
-export default connect(mapStateToProps, null)(AdminProducts);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminProducts);
+//export default connect(mapStateToProps, null)(AdminProducts);

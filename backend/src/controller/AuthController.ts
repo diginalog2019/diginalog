@@ -7,7 +7,7 @@ const config = require('../config/config');
 
 export class AuthController {
     static register = async (req, res) => {
-        const {id, password} = req.body;
+        const {id, password, email, name, tel, birth} = req.body;
         let userinfo = {id, password};
         let user = await getConnection().getRepository(User).findOne({where: {U_ID: id}});
         let newUser = new User();
@@ -25,10 +25,11 @@ export class AuthController {
             newUser.U_ID = id;
             newUser.U_PW = encrypted;
             newUser.admin = false;
-            // newUser.U_Email = email;
-            // newUser.U_Name = name;
-            // newUser.U_Tel = tel;
-            // newUser.U_Birth = birth;
+            newUser.U_Email = email;
+            newUser.U_Name = name;
+            newUser.U_Tel = tel;
+            newUser.U_Birth = birth;
+            newUser.U_Date = new Date();
             await getConnection().getRepository(User).save(newUser);
             //let {user: newUser, jwt: jwt} = await AuthController.addUser(userinfo);
         }
@@ -39,7 +40,8 @@ export class AuthController {
         result.data = data;
         res.send(result);
     }
-    static addUser = async (user) => {
+    // 2019.11.12 Shi Ha Yeon : 이거 이제 안씀
+   /* static addUser = async (user) => {
         //const {id, password, email, name, tel, birth};
         const {id, password} = user;
         const encrypted = crypto.createHmac('sha1', config.secret).update(password).digest('base64');
@@ -53,21 +55,31 @@ export class AuthController {
         // newUser.U_Birth = birth;
         await getConnection().getRepository(User).save(newUser);
         return {user:newUser, jwt:encrypted};
-    }
+    }*/
     static login = async (req, res) => {
         const {id, password} = req.body;
         const secret = req.app.get('jwt-secret');
 
         let user = await getConnection().getRepository(User).findOne({where: {U_ID: id}});
         const encrypted = crypto.createHmac('sha1', config.secret).update(password).digest('base64');
-
-        const response = (token) => {
-            res.json({
-                message: 'logged in successfully',
-                token
-            })
+        let profile = {id: id, admin: false};
+        const result = new ResultVo(0, "success");
+        const data = {user: profile, jwt: "", message:""};
+        const response = (msg) => {
+            data.message = msg;
+            result.data = data;
+            console.log(result.data);
+            res.send(result);
+        }
+        const appendToken = (token) => {
+            //data.message = 'logged in successfully';
+            //data.jwt = JSON.stringify(token);
+            data.jwt = token;
+            data.user.admin = user.admin;
+            //console.log(data.jwt);
         }
         if (!user) {
+            response('user does not exist');
             console.log("login failed. user does not exist");
         } else {
             if(user.U_PW == encrypted) {
@@ -82,23 +94,26 @@ export class AuthController {
                         },
                         secret,
                         {
-                            expiresIn: '7d',
+                            expiresIn: '1h',
                             issuer: 'diginalog',
                             subject: 'userInfo'
                         }, (err, token) => {
-                            if(err) reject(err); //reject가 언제 일어나는지, 어떻게 실행되는지 모르겠음.
+                            if(err) reject(err);
                             resolve(token);
                         })
-                    }).then(response);
+                    }).then(appendToken)
+                    .then(response)
+                    .catch((err) => {
+                        console.error(err);
+                        response(err);
+                    });
                 } else {
                 console.log("pw not match");
-                res.json({
-                    message: 'pw not match'
-                })
+                //data.message = 'pw not match';
+                response('pw not match');
             }
         }
-        // console.log 대신 result에 에러메시지를 넘겨주면 좋을듯? 프론트에 어떻게..
-        //const result = new ResultVo(0, "success");
+
     }
     static check = async (req, res) => {
         res.json({

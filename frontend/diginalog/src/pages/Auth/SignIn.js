@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {userLoginFetch} from '../../redux/actions';
+import {getProfileFetch, logoutUser, userLoginFetch} from '../../redux/actions';
 import "./Auth.module.scss";
 
 class Login extends Component {
     state = {
-        username: "",
-        password: ""
+        id: "",
+        password: "",
+    }
+    componentWillMount() {
+        this.props.getProfileFetch();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log('componentWillReceiveProps:', nextProps);
+        //nextProps.getProfileFetch();
     }
 
     handleChange = event => {
@@ -20,16 +28,24 @@ class Login extends Component {
         this.props.userLoginFetch(this.state)
     }
 
+    handleClick = event => {
+        event.preventDefault()
+        // Remove the token from localStorage
+        localStorage.removeItem("token")
+        // Remove the user object from the Redux store
+        this.props.logoutUser()
+    }
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
                 <h1>Login</h1>
 
-                <label>Username</label>
+                <label>ID</label>
                 <input
-                    name='username'
-                    placeholder='Username'
-                    value={this.state.username}
+                    name='id'
+                    placeholder='ID'
+                    value={this.state.id}
                     onChange={this.handleChange}
                 /><br/>
 
@@ -43,13 +59,27 @@ class Login extends Component {
                 /><br/>
 
                 <input type='submit'/>
+
+                {this.props.currentUser.id
+                    ? <button onClick={this.handleClick}>Log Out</button>
+                    : null
+                }
+
             </form>
         )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    userLoginFetch: userInfo => dispatch(userLoginFetch(userInfo))
+    userLoginFetch: userInfo => dispatch(userLoginFetch(userInfo)),
+    getProfileFetch: () => dispatch(getProfileFetch()),
+    logoutUser: () => dispatch(logoutUser())
 })
 
-export default connect(null, mapDispatchToProps)(Login);
+let mapStateToProps = (state) => {
+    return {
+        currentUser : state.authReducer.currentUser
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -45,61 +45,70 @@ export class AdminController {
     static getAllProducts = async (req, res) => {
         // Shi Ha Yeon : 2019.10.09 ----------------------------------------------
         // refuse if not an admin
+        //console.log(req);
         if(!req.decoded.admin) {
-            return res.status(403).json({
+            /*return res.status(403).json({
                 message: 'you are not an admin'
-            })
+            })*/
+            return res.send({message: 'you are not an admin', data:[],total:{}});
         }
-        // SHi Ha Yeon : 2019.10.09 Fin ------------------------------------------
-        const {start_index, page_size} = req.query;
+        else {
+            // SHi Ha Yeon : 2019.10.09 Fin ------------------------------------------
+            const {start_index, page_size} = req.query;
 
-        const options = {};
-        // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
-        /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
-            "P_Size","P_StarPoint","P_DetailIMG",
-            "P_TitleIMG","categoryCateID", "creatorCID"];*/
+            const options = {};
+            // 관리자는 제품의 모든 정보를 다 볼 수 있으므로 select 조건빼고 모두 가져오게 함
+            /*options['select'] = ["PID", "P_Name", "P_Date", "P_Price", "P_Extension",
+                "P_Size","P_StarPoint","P_DetailIMG",
+                "P_TitleIMG","categoryCateID", "creatorCID"];*/
 
-        options['order'] = {PID: 'DESC'};
-        if (start_index) {
-            options['skip'] = start_index;
-        }
-        if (page_size) {
-            options['take'] = page_size;
-        }
-
-        let products = await getConnection().getRepository(Product).find(options);
-
-        const total = await getConnection().getRepository(Product).count();
-
-        const categorys = await getConnection().getRepository(Category).find();
-
-        const creators = await getConnection().getRepository(Creator).find();
-
-        const products2 = products.map(product => {
-            // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
-            let state = '';
-            switch(product.State){
-                case -1 : state = "미승인";
-                    break;
-                case 0 : state = "심사중";
-                    break;
-                case 1: state="승인";
-                    break;
+            options['order'] = {PID: 'DESC'};
+            if (start_index) {
+                options['skip'] = start_index;
             }
-            let date = product.P_Date.toLocaleString();
-            let product2 = {StateName:state,
-                Date:date,
-                CreatorName:creators[(product.creatorCID-1)].C_Nickname,
-                CateName:categorys[(product.categoryCateID-1)].Cate_Name,
-                ...product};
-            return product2;
-            // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
-        });
+            if (page_size) {
+                options['take'] = page_size;
+            }
 
-        const result = new ResultVo(0, "success");
-        result.data = products2;
-        result.total = total;
-        res.send(result);
+            let products = await getConnection().getRepository(Product).find(options);
+
+            const total = await getConnection().getRepository(Product).count();
+
+            const categorys = await getConnection().getRepository(Category).find();
+
+            const creators = await getConnection().getRepository(Creator).find();
+
+            const products2 = products.map(product => {
+                // Shi Ha Yeon : 2019.09.14 -----------------------------------------------
+                let state = '';
+                switch (product.State) {
+                    case -1 :
+                        state = "미승인";
+                        break;
+                    case 0 :
+                        state = "심사중";
+                        break;
+                    case 1:
+                        state = "승인";
+                        break;
+                }
+                let date = product.P_Date.toLocaleString();
+                let product2 = {
+                    StateName: state,
+                    Date: date,
+                    CreatorName: creators[(product.creatorCID - 1)].C_Nickname,
+                    CateName: categorys[(product.categoryCateID - 1)].Cate_Name,
+                    ...product
+                };
+                return product2;
+                // Shi Ha Yeon : 2019.09.14 Fin--------------------------------------------
+            });
+
+            const result = new ResultVo(0, "success");
+            result.data = products2;
+            result.total = total;
+            res.send(result);
+        }
     }
     // Shi Ha Yeon : 2019.09.01 11:31 Fin ---------------------------------------------------------------------
     static addProduct = async (req, res) => {

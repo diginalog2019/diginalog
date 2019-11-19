@@ -1,15 +1,19 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {connect} from 'react-redux';
 import Home from "./Home";
 import Menu from "./Menu";
 import UserIndex from "./User/UserIndex";
-import Product from "./User/Product/Product";
 import {AdminIndex} from "./Admin/AdminIndex";
 import {Register} from "./Creator/Register";
 import CreatorIndex from "./Creator/CreatorIndex";
 import AuthIndex from "./Auth/AuthIndex";
+import {getProfileFetch} from '../redux/actions';
 
-export class Root extends Component {
+class Root extends Component {
+  componentDidMount = () => {
+    //this.props.getProfileFetch()
+  }
   render() {
     return (
       <BrowserRouter>
@@ -36,3 +40,8 @@ export class Root extends Component {
     )
   }
 }
+const mapDispatchToProps = dispatch => ({
+  getProfileFetch: () => dispatch(getProfileFetch())
+})
+
+export default connect(null, mapDispatchToProps)(Root);
