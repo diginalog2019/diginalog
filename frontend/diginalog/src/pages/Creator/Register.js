@@ -4,24 +4,31 @@ import api from '../utils/api';
 import './Creators.module.scss';
 import axios from "axios";
 
-var now = new Date();
-
 export class Register extends Component {
 
     state = {
         cid:'',
         productName: '',
         price: '',
-        date: now.toLocaleString(),
-        extension: '',
         size:'',
         detailIMG:'',
         titleIMG: '',
         file: '',
         cate_id:''
 
-
     }
+
+    /*getExtensionOfFilename = (filename) => {
+
+        const _fileLen = filename.length;
+        const _lastDot = filename.lastIndexOf('.');
+        const _fileExt = filename.substring(_lastDot, _fileLen).toLowerCase();
+        console.log(_fileExt);
+        this.setState(extension: _fileExt);
+    }*/
+    /* get_extension(filename) {
+         return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
+     }*/
 
     handleText = (e, key) => {
         this.setState({[key]: e.target.value});
@@ -45,6 +52,7 @@ export class Register extends Component {
                 this.setState({file: response.data.data});
             });
     }
+
     handleUploadDetailIMG = (e) => {
         e.preventDefault();
 
@@ -55,7 +63,7 @@ export class Register extends Component {
         }
 
         const formData = new FormData();
-        formData.append("detailIMG", e.target.files[0]);
+        formData.append("file", e.target.files[0]);
         formData.append("filename", e.target.files[0].name);
         api.post('/api/creator/detailIMG', formData)
             .then(response => {
@@ -63,6 +71,7 @@ export class Register extends Component {
                 this.setState({detailIMG: response.data.data});
             });
     }
+
     handleUploadTitleIMG = (e) => {
         e.preventDefault();
 
@@ -73,22 +82,13 @@ export class Register extends Component {
         }
 
         const formData = new FormData();
-        formData.append("titleIMG", e.target.files[0]);
+        formData.append("file", e.target.files[0]);
         formData.append("filename", e.target.files[0].name);
         api.post('/api/creator/titleIMG', formData)
             .then(response => {
                 console.log(response.data);
                 this.setState({titleIMG: response.data.data});
             });
-    }
-
-    optionSize(value){
-        if(value=="1"){
-            document.getElementById("option").style.display = "block";
-        }
-        else{
-            document.getElementById("option").style.display = "none";
-        }
     }
 
     submit = (e) => {
@@ -105,11 +105,9 @@ export class Register extends Component {
                     cid:'',
                     productName: '',
                     price: '',
-                    date : now.toLocaleString(),
-                    extension: '',
-                    size:'',
                     detailIMG:'',
                     titleIMG: '',
+                    size:'',
                     file: '',
                     cate_id:''
                 });
@@ -125,105 +123,104 @@ export class Register extends Component {
                 </br>
                 <form onSubmit={this.submit}>
                     <div className="form-group mt-1">
-                        <label htmlFor="cid">ID</label>
+                        <label htmlFor="cid">ID-login // 기능구현 이후 생각해볼것</label>
                         <input type="text" className="form-control" placeholder="Enter ID" id="cid"
                                value={this.state.cid} onChange={(e) => this.handleText(e, 'cid')} required />
                     </div>
 
-                  {/* <div className="form-group mt-1">
+                    <div className="form-group mt-1">
+                        <label htmlFor="cate_id">Category_ID</label>
+                        <select className="form-control" id="cate_id" value={this.state.cate_id} onChange={(e)=>this.handleText(e, 'cate_id')} required>
+                            <option value="0"></option>
+                            <option value="1">다이어리 속지</option>
+                            <option value="2">떡메모지</option>
+                            <option value="3">스티커</option>
+                            <option value="4">마스킹테이프</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group mt-1">
+                        <label htmlFor="size">Size</label>
+                        <select className="form-control" id="size" value={this.state.size} onChange={(e)=>this.handleText(e, 'size')} >
+                            <option value="NO">카테고리가 다이어리 속지가 아닌 경우는 건드리지마시오</option>
+                            <option value="B5">B5</option>
+                            <option value="B4">B4</option>
+                            <option value="B3">B3</option>
+                            <option value="A5">A5</option>
+                            <option value="A4">A4</option>
+                            <option value="A3">A3</option>
+                        </select>
+                    </div>
+
+                    {/* <div className="form-group mt-1">
                         <label htmlFor="nickname">Nickname</label>
                         <input type="text" className="form-control" placeholder="Enter Nickname" id="nickname"
                                value={this.state.nickname} onChange={(e) => this.handleText(e, 'nickname')} />
-                    </div>*/}
-
+                    </div>
+*/}
                     <div className="form-group mt-1">
                         <label htmlFor="productName">Product Name</label>
                         <input type="productName" className="form-control" placeholder="Enter Product Name" id="productName"
                                value={this.state.productName} onChange={(e) => this.handleText(e, 'productName')} required />
                     </div>
-                {/*knh --- onChange함수에 함수 두개 쓸때 아래 방법 맞는지 확인해야함 */}
 
                     <div className="form-group mt-1">
-                        <label htmlFor="cate_id">Category</label>
-                        <select className="form-control" id="cate_id" value={this.state.cate_id} onChange= optionSize(this.value); {(e)=>this.handleText(e, 'cate_id')}; required>
-                        <option value="0"></option>
-                        <option value="1">속지</option>
-                        <option value="2">마스킹테이프</option>
-                        <option value="3">스티커</option>
-                        <option value="4">기타</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group mt-1" name="option" id="option" style = "style:none">
-                        <label htmlFor="size">Size</label>
-                        <select className="form-control" id="size" value={this.state.size} onChange={(e)=>this.handleText(e, 'size')} >
-                        <option value="0"></option>
-                        <option value="A6">A6</option>
-                        <option value="A5">A5</option>
-                        <option value="A4">A4</option>
-                        <option value="B6">B6</option>
-                        <option value="B5">B5</option>
-                        <option value="B3">B3</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group mt-1">
-                        <label htmlFor="price">Price</label>
+                        <label htmlFor="price">Price (원)</label>
                         <input type="price" className="form-control" placeholder="Enter Price (ex. 20000)" id="price"
                                value={this.state.price} onChange={(e) => this.handleText(e, 'price')} required />
                     </div>
 
-        {/*<div className="form-group mt-1">
+                    {/*<div className="form-group mt-1">
                         <label htmlFor="date">Date</label>
                         <input type="date" className="form-control" placeholder="Enter Date (ex. 2020.01.01)" id="date"
                                value={this.state.date} onChange={(e) => this.handleText(e, 'date')} />
-                    </div>*/}
-
-
-                    <div className="form-group mt-1">
-                        <label htmlFor="extension">Extension</label>
-                        <select className="form-control" id="extension" value={this.state.extension} onChange={(e)=>this.handleText(e, 'extension')} required>
-                            <option value=""></option>
-                            <option value="bmp">BMP(*.BMP, *.RLE, *.DIB)</option>
-                            <option value="jpeg">JPEG(*.JPG)</option>
-                            <option value="gif">GIF(*.GIF)</option>
-                            <option value="png">PNG(*.PNG)</option>
-                            <option value="tiff">TIFF(*.TIF, *.TIFF)</option>
-                            <option value="raw">RAW(*.raw)</option>
-                        </select>
                     </div>
 
+                    <div className="form-group mt-1">
+                        <label htmlFor="extension">Extension (only PDF or PNG)</label>
+                        <select className="form-control" id="extension" value={this.state.extension} onChange={(e)=>this.handleText(e, 'extension')} required>
+                            <option value=""></option>
+                            <option value="png">PNG(*.PNG)</option>
+                            <option value="pdf">PDF(*.PDF)</option>
+                        </select>
+                    </div>
+*/}
+                    (아래 항목에서 여러장 업로드시 zip 파일로 업로드 / pdf, png 파일만 업로드 가능)
+                    개발자친화 환경에서 개발된 사이트 입니다. 한장씩만 업로드 가능하며 무조건 png 파일만 업로드 가능하시오.
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>File</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="file" accept="image/!*" multiple onChange={this.handleUploadFile} required />
+                            <input type="file" className="custom-file-input" id="file"  onChange={this.handleUploadFile}/>
                             <label className="custom-file-label" htmlFor="file">Choose File</label>
                         </div>
-                        {
+                        {/*{
                             this.state.file ? <img src={this.state.file} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.file)}
                     </div>
 
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>Detail IMG</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="detailIMG" accept="image/!*" multiple onChange={this.handleUploadDetailIMG} />
+                            <input type="file" className="custom-file-input" id="detailIMG" onChange={this.handleUploadDetailIMG} />
                             <label className="custom-file-label" htmlFor="detailIMG">Choose Detail IMG</label>
                         </div>
-                        {
+                        {/*{
                             this.state.detailIMG ? <img src={this.state.detailIMG} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.detailIMG)}
                     </div>
 
                     <div className="d-flex flex-column mt-3 align-items-start">
                         <div>Title IMG</div>
                         <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="titleIMG" accept="image/!*" multiple onChange={this.handleUploadTitleIMG}  />
+                            <input type="file" className="custom-file-input" id="titleIMG" onChange={this.handleUploadTitleIMG}  />
                             <label className="custom-file-label" htmlFor="titleIMG">Choose Title IMG</label>
                         </div>
-                        {
+                        {/*{
                             this.state.titleIMG ? <img src={this.state.titleIMG} alt={this.state.name} style={{width: '200px'}} /> : ''
-                        }
+                        }*/}
+                        {JSON.stringify(this.state.titleIMG)}
                     </div>
 
                     <div className="m-3 d-flex justify-content-center">

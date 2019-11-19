@@ -32,7 +32,7 @@ class Product extends Component {
 
     render(){
         return (
-                this.state.product ?
+            this.state.product ?
                 <div>
                     <Nav className={"mb-3"}>
                         <NavItem>

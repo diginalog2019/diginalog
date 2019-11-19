@@ -2,11 +2,11 @@ import {Category} from "../entity/Category";
 import {Creator} from "../entity/Creator";
 import {getConnection} from "typeorm";
 import {Product} from "../entity/Product";
+import {File} from "../entity/File";
 import {ResultVo} from "../vo/ResultVo";
 import {s3} from "../config/aws";
 
 export class CreatorController {
-    /* Kwon Na Hyun : 2019.09.01 && 2019.09.15 ------------------------------------------*/
     static uploadFile = async (req, res) => {
         console.log(req.file);
         //let products = await getConnection().getRepository(Product).find(options);
@@ -69,13 +69,7 @@ export class CreatorController {
     static uploadTitleIMG = async (req, res) => {
         console.log(req.file);
         let products = await getConnection().getRepository(Product);
-        //let total = SELECT COUNT(*) FROM products;
 
-        //const options = {where:[{cid}],take:1};
-        //const c = await getConnection().getRepository(Creator).findOne(options);
-
-        //products[count(*)-1].PID
-        // s3 upload configuring parameters
         const params = {
             Bucket: 'diginalog-s3',
             Body: req.file.buffer,
@@ -101,11 +95,11 @@ export class CreatorController {
         res.send(result);
     }
     static registerProduct = async (req, res) => {
-        const {productName, date, price, extension, size, file, detailIMG, titleIMG, cid, cate_id} = req.body;
+        const {productName, date, price, extension, size, files, detailIMG, titleIMG, cid, cate_id} = req.body;
         const newProduct = new Product();
         //newProduct.PID = PID;
         newProduct.P_Name = productName;
-        newProduct.P_Date = date;
+        newProduct.P_Date = new Date();
         newProduct.P_Price = price;
         newProduct.P_Size = size;
         newProduct.State = -1;
@@ -124,10 +118,25 @@ export class CreatorController {
             newProduct.category = c;
             await getConnection().getRepository(Product).save(newProduct);
         }
+        if (files && files.length > 0) {
+            const newFiles = files.map(file => {
+                const f = new File();
+                //f.F_Extension = req.file.originalname.slice((req.file.originalname.lastIndexOf('.')-1 >>> 0));
+                f.F_Extension = "png";
+                f.F_Name = req.file.originalname;
+                //f.F_Type = 타입을 따로 저장하지 않고 이름 마지막에 숫자로 표시되면 안되나? 0,1,2
+                f.product = newProduct;
+                return f;
+            })
+            // bulk insert
+            await getConnection().createQueryBuilder().insert().into(File).values(newFiles).execute();
+        }
 
         res.send(new ResultVo(0, 'success'));
     }
-    /* Kwon Na Hyun : 2019.09.13 fin------------------------------------------*/
+
+
+    /* Kwon Na Hyun fin------------------------------------------*/
     /*jua*/
     static getAllCreators = async (req, res) => {
         const {start_index, page_size} = req.query;
