@@ -6,14 +6,18 @@ export class User{
     UID : number;
 
     @Column({
+        nullable:false
+    })
+    admin : boolean;
+
+    @Column({
         length : 20,
         nullable:true
     })
     U_ID : string;
 
     @Column({
-        length : 20,
-        nullable:true
+        length : 50,
     })
     U_PW : string;
 

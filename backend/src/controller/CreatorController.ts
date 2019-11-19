@@ -189,7 +189,6 @@ export class CreatorController {
         const creators = await getConnection().getRepository(Creator).find();
 
         let products2 = products.filter(product => {
-
             return product.creatorCID == creatorCID;
         });
 

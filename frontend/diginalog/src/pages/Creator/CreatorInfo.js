@@ -9,10 +9,9 @@ import {connect} from "react-redux";
 class CreatorInfo extends Component {
   /*---------Jang Jua 2019_09_07------------------------*/
   state = {
-    pageSize: 6,
+    pageSize: 12,
     totalCount: 100,
     currentPage: 1,
-    total:100,
     filteredProducts:[],
   };
 
@@ -28,6 +27,8 @@ class CreatorInfo extends Component {
   getCreatorInfo = async (creatorCID) => {
     let response = await api.get(`/api/creator/creatorsProduct/${this.props.creatorCID}?start_index=
       ${this.state.pageSize * (this.state.currentPage - 1)}&page_size=${this.state.pageSize}`);
+    console.log(response);
+    console.log(response.data.total);
     this.setState({
       creatorCID:creatorCID,
       filteredProducts: response.data.data,
