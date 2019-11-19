@@ -1,8 +1,9 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn, OneToMany} from "typeorm";
 import {Hashtag} from "./Hashtag"
 import {User} from "./User"
 import {Creator} from "./Creator"
 import {Category} from "./Category";
+import {File} from "./File"
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn()
@@ -55,4 +56,9 @@ export class Product {
 
     @ManyToOne(type => Category, category => category.products , {onDelete: 'CASCADE', onUpdate: "CASCADE"})
     category: Category;
+
+    @OneToMany(type => File, files => files.product, {
+        cascade : true
+    })
+    public files: File[];
 }

@@ -4,8 +4,6 @@ import './Creators.module.scss';
 import Pagination from 'rc-pagination';
 import 'rc-pagination/dist/rc-pagination.css';
 import CreatorInfo from './CreatorInfo';
-import CreatorInfoDetail from "./CreatorInfoDetail";
-import {Route, Switch} from "react-router-dom";
 
 class SearchCreators extends Component {
   /*---------Jang Jua 2019_09_07------------------------*/
@@ -58,7 +56,7 @@ class SearchCreators extends Component {
     let find = this.state.creators.findIndex(creator => (
       creator.C_ID === this.state.keyword
     ));
-    console.log(find);
+    //console.log(find);
     this.setState({index:find});
   };
   handleText = (e, key) => {
@@ -70,24 +68,24 @@ class SearchCreators extends Component {
 
   render() {
     return (
-      <>
-        <form onSubmit={this.search}>
-          <div className="input-group mb-3">
-            <input type="text" className="form-control" placeholder="Enter Creator's ID" id="C_ID"
-                   value={this.state.keyword} onChange={(e) => this.handleText(e, 'keyword')} required minLength="3" maxLength="10"/>
+      <div className="ml-4 mr-4">
+        <div className = "col-md-8">
+          <form onSubmit={this.search}>
+            <div className="input-group mb-3">
+              <input type="text" className="form-control" placeholder="Enter Creator's ID" id="C_ID"
+                     value={this.state.keyword} onChange={(e) => this.handleText(e, 'keyword')} required minLength="3" maxLength="10"/>
               <div className="input-group-append">
                 <button type="search" className="btn btn-outline-secondary" onClick={this.handleSearchMode}>SEARCH</button>
               </div>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
         {
           this.state.initialState ? this.state.index!==-1 ? <CreatorInfo creatorCID={this.state.index+1} history={this.props.history}/>
             : "일치하는 ID가 없습니다."
             : " "
         }
-        <Pagination total={this.state.totalCount} current={this.state.currentPage} pageSize={this.state.pageSize}
-                    onChange={this.onChange} className="d-flex justify-content-center"/>
-      </>
+      </div>
     )
   }
 }

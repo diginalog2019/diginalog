@@ -1,13 +1,8 @@
 frontend/**/workspace.xml
 frontend/.idea
-<<<<<<< HEAD
 frontend/**/.idea
 .idea
 **/.DS_Store
 **/node_modules
-
-=======
 ./DS_Store
-frontend/**/.idea
-.idea
->>>>>>> feature/creator/list
+config.ts

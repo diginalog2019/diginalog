@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import api from '../../utils/api'
+import api from '../utils/api'
 import Pagination from "rc-pagination";
 import 'rc-pagination/dist/rc-pagination.css';
 import {Route, Switch} from "react-router-dom";
-import {connect} from "react-redux";
-import Product from '../Product/Product';
-import './UserProducts.module.scss';
+import Product from '../User/Product/Product';
 
-class UserProducts extends Component {
+class MainPageProducts extends Component {
     state = {
         pageSize:10,
         totalCount: 0,
@@ -28,6 +26,7 @@ class UserProducts extends Component {
             products: response.data.data,
             totalCount : response.data.total
         });
+
     }
 
     onError = () => {
@@ -88,4 +87,4 @@ class UserProducts extends Component {
     }
 }
 
-export default UserProducts;
+export default MainPageProducts;

@@ -1,95 +1,207 @@
 import {getConnection} from "typeorm";
-import {User} from "../entity/User";
 import {ResultVo} from "../vo/ResultVo";
-import {Category} from "../entity/Category";
 import {Product} from "../entity/Product";
-import {Creator} from "../entity/Creator";
 import {s3} from "../config/aws";
+import {Hashtag} from "../entity/Hashtag";
+import {Hash} from "crypto";
 
 export class UserController {
     // Kim Ju Hui : 2019.09.13 Sat--------------------------------------------
     static getProduct = async (req, res) => {
 
-        console.log(req.query);
         const {id} = req.query;
 
-        console.log("pid = "+id);
+        let product = await getConnection().getRepository(Product).createQueryBuilder("product")
+                            .where("product.PID" + " = :pid", {pid: id})
+                            .leftJoinAndSelect("product.creator", "creator")
+                            .leftJoinAndSelect("product.category", "category")
+                            .leftJoinAndSelect("product.files", "file")
+                            .leftJoinAndSelect("product.hashtags","hashtag")
+                            .getOne();
 
-        const options = {relation:["category"], where: {PID: id}};
-        let product = await getConnection().getRepository(Product).findOne(options);
+        let productDetail = [], productTitle = [], productFile = [];
 
-        const category = await getConnection().getRepository(Category).findOne({where:{Cate_ID:product.categoryCateID}});
-        const creator = await getConnection().getRepository(Creator).findOne({where:{CID:product.creatorCID}});
+        await Promise.all(product.files.map(async (file) => {
 
-        product = {...product,category,creator};
+            let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
+            file['F_Url'] = F_Url;
 
-        const result = new ResultVo(0,"success");
+            switch (file.F_Type) {
+                case 0:
+                    productTitle.push(file);
+                    break;
+                case 1:
+                    productDetail.push(file);
+                    break;
+                case 2:
+                    product['productFile'] = file;
+
+            }
+        }))
+
+        product['productDetail'] = productDetail;
+        product['productTitle'] = productTitle;
+
+        delete product.files;
+
+        const result = new ResultVo(0, "success");
         result.data = product;
         res.send(result);
     }
     // Kim Ju Hui : 2019.09.13 Sat Fin-------------------------------------------
     // Kim Ju Hui : 2019.08.30 Fri-------------------------------------------
-    static getAllProduct = async(req,res) => {
+    static getAllProduct = async (req, res) => {
 
         const {start_index, page_size} = req.query;
 
-        const options = { relation:["category"],where: { State: 1 }};
+        let products = await getConnection().getRepository(Product).createQueryBuilder("product")
+                            .where("product.State = :state", {state: 1})
+                            .leftJoinAndSelect("product.creator", "creator")
+                            .leftJoinAndSelect("product.category", "category")
+                            .leftJoinAndSelect("product.files", "file")
+                            .leftJoinAndSelect("product.hashtags","hashtag")
+                            .skip(start_index).take(page_size)
+                            .getMany();
 
-        if (start_index) {
-            options['skip'] = start_index;
-        }
-        if (page_size) {
-            options['take'] = page_size;
-        }
+        await Promise.all(products.map(async (product) => {
+            let productDetail = [], productTitle = [], productFile = [];
 
-        const products = await getConnection().getRepository(Product).find(options);
+            await Promise.all(product.files.map(async (file) => {
 
-        // Shi Ha Yeon : 2019.08.30 Fri-----------------------------------------------------------------------
-        const categorys = await getConnection().getRepository(Category).find();
-        // Kim Ju Hui : 2019.08.30 18:24 Fri-----------------------------------------------------------------------
-        const creators = await getConnection().getRepository(Creator).find();
+                let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
+                file['F_Url'] = F_Url;
+
+                switch (file.F_Type) {
+                    case 0:
+                        productTitle.push(file);
+                        break;
+                    case 1:
+                        productDetail.push(file);
+                        break;
+                    case 2:
+                        product['productFile'] = file;
+
+                }
+            }))
+
+            product['productDetail'] = productDetail;
+            product['productTitle'] = productTitle;
+
+            delete product.files;
+        }))
+
         const total = products.length;
-        const products2 = products.map(product => {
-            let product2 = {CreatorName: creators[(product.creatorCID-1)].C_Nickname,CateName:categorys[(product.categoryCateID-1)].Cate_Name, ...product};
-            // Kim Ju Hui : 2019.08.30 18:24 Fin----------------------------------------------------------------------
-            return product2;
-        });
-
-        // Shi Ha Yeon : 2019.08.30 Fri Fin ---------------------------------------------------------------------
-
-        const result = new ResultVo(0,"success");
-
-        result.data = products2;
+        const result = new ResultVo(0, "success");
+        result.data = products;
         result.total = total;
         res.send(result);
     }
     // Kim Ju Hui : 2019.08.30 Fri Fin-------------------------------------------
     // Kim Ju Hui : 2019.09.17 Tue-------------------------------------------
-    static getFileUrl = async(req, res) => {
+    static getFileUrl = async (req, res) => {
 
         console.log(req.query);
-        const {prefix, fileName, extension} = req.query;
+        const {fileName, fileExtension, fileType} = req.query;
 
-        //const file = require('fs').createWriteStream('test.png');
+        res.send(await UserController.getUrl(fileName, fileExtension, fileType));
+    }
 
-        // let prefix = 'P_File/';
-        // let key = '1.png';
+    static getUrl = async (fileName, fileExtension, fileType) => {
 
-        console.log('P_File/'+fileName+'.'+extension);
+        if (typeof (fileType) == "string")
+            fileType = parseInt(fileType);
 
-        let getParams = {
-            Bucket : 'diginalog-s3',
-            Key : prefix + fileName +'.'+extension,
-            Expires : 60 * 5
+        let folderName = '';
+
+        switch (fileType) {
+            case 0:
+                folderName = 'P_TitleIMG/';
+                break;
+            case 1:
+                folderName = 'P_DetailIMG/';
+                break;
+            case 2:
+                folderName = 'P_File/';
         }
 
-        /*let fileStream = s3.getObject(getParams).createReadStream();
-        res.attachment(name+'.'+extension);
-        fileStream.pipe(res);*/
+        let params = {
+            Bucket: 'diginalog-s3',
+            Key: folderName + fileName + '.' + fileExtension
+        }
 
-        const url = s3.getSignedUrl('getObject',getParams);
-        console.log(url);
-        res.send(url);
+        return new Promise(function (resolve, reject) {
+            s3.headObject(params).promise()
+                .then(function (data) {
+                    resolve(s3.getSignedUrl('getObject', params));
+                }).catch(function (err) {
+                resolve('error');
+            });
+        });
     }
     // Kim Ju Hui : 2019.09.17 Tue Fin-------------------------------------
+
+    static getAllHashtag = async (req, res) => {
+
+        let hashtags = await getConnection().getRepository(Hashtag).createQueryBuilder("hashtags")
+                            .leftJoinAndSelect("hashtags.products","product")
+                            .andWhere("product.state = :state", {state : 1})
+                            .getMany();
+
+        await Promise.all(hashtags.map (async (hashtag) => {
+            hashtag['total'] = hashtag.products.length;
+            hashtag.products;
+        }))
+
+        const result = new ResultVo(0,"success");
+        result.data = hashtags;
+        res.send(result);
+    }
+
+    static getProductsByHashtag = async (req, res) => {
+        const {start_index, page_size, hid} = req.query;
+
+        let hashtagProducts = await getConnection().getRepository(Hashtag).createQueryBuilder("hashtags")
+                                    .where("hashtags.HID = :HID",{HID : hid})
+                                    .leftJoinAndSelect("hashtags.products","product")
+                                    .andWhere("product.state = :state", {state : 1})
+                                    .leftJoinAndSelect("product.creator", "creator")
+                                    .leftJoinAndSelect("product.category", "category")
+                                    .leftJoinAndSelect("product.files", "file")
+                                    .leftJoinAndSelect("product.hashtags","hashtag")
+                                    .skip(start_index).take(page_size)
+                                    .getOne();
+
+        await Promise.all(hashtagProducts.products.map(async (product) => {
+            let productDetail = [], productTitle = [], productFile = [];
+
+            await Promise.all(product.files.map(async (file) => {
+
+                let F_Url = await UserController.getUrl(file.F_Name, file.F_Extension, file.F_Type);
+                file['F_Url'] = F_Url;
+
+                switch (file.F_Type) {
+                    case 0:
+                        productTitle.push(file);
+                        break;
+                    case 1:
+                        productDetail.push(file);
+                        break;
+                    case 2:
+                        product['productFile'] = file;
+
+                }
+            }))
+
+            product['productDetail'] = productDetail;
+            product['productTitle'] = productTitle;
+
+            delete product.files;
+        }))
+
+        const total = hashtagProducts.products.length;
+        const result = new ResultVo(0,"success");
+        result.data = hashtagProducts;
+        result.total = total;
+        res.send(result);
+    }
 }

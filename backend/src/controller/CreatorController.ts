@@ -152,33 +152,45 @@ export class CreatorController {
             let product2 = {CreatorNick:creators[(product.creatorCID-1)].C_Nickname, ...product};
             return product2;
         });
-        console.log(products2);
         const result = new ResultVo(0, "success");
         result.data = products2;
         result.total = total;
         res.send(result);
     }
     static getAllCreatorsInfo = async (req, res) => {
-        const options = {};
-        options['order'] = {CID: 'ASC'};
-
-        let creators = await  getConnection().getRepository(Creator).find(options);
-        const total = await getConnection().getRepository(Product).count();
+        let creators = await  getConnection().getRepository(Creator).find();
 
         console.log(creators);
         const result = new ResultVo(0,"success");
         result.data = creators;
-        result.total = total;
         res.send(result);
     }
     static getCreatorProduct = async (req,res) => {
-        console.log(req.params);
+        const {start_index, page_size} = req.query;
         const {creatorCID} = req.params;
 
-        const options = {relations: ["creator"], where: [{creatorCID}]};
+        const options = {};
+        /*options['select'] = ["CID", "C_Email","C_Page","C_Nickname"];*/
+        options['order'] = {creatorCID: 'ASC'};
+        if (start_index) {
+            options['skip'] = start_index;
+        }
+        if (page_size) {
+            options['take'] = page_size;
+        }
 
-        const products = await getConnection().getRepository(Product).find(options);
-        res.send(products);
+        let products = await getConnection().getRepository(Product).find(options);
+
+        const creators = await getConnection().getRepository(Creator).find();
+
+        let products2 = products.filter(product => {
+            return product.creatorCID == creatorCID;
+        });
+
+        const result = new ResultVo(0, "success");
+        result.data = products2;
+        result.total = products2.length;
+        res.send(result);
     }
     static getSingleProduct = async(req,res) => {
         console.log(req.query);
